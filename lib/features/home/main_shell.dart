@@ -38,6 +38,7 @@ class _MainShellState extends State<MainShell> {
       ProfileScreen(
         appController: widget.appController,
         authController: widget.authController,
+        dietController: widget.dietController,
       ),
     ];
   }

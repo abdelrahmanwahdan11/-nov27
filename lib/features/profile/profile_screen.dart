@@ -2,18 +2,22 @@ import 'package:flutter/material.dart';
 
 import '../../controllers/app_controller.dart';
 import '../../controllers/auth_controller.dart';
+import '../../controllers/diet_controller.dart';
 import '../../core/localization/app_localizations.dart';
 import '../../core/theme/app_theme.dart';
+import '../wellness/wellness_hub_screen.dart';
 
 class ProfileScreen extends StatelessWidget {
   const ProfileScreen({
     super.key,
     required this.appController,
     required this.authController,
+    required this.dietController,
   });
 
   final AppController appController;
   final AuthController authController;
+  final DietController dietController;
 
   @override
   Widget build(BuildContext context) {
@@ -86,6 +90,20 @@ class ProfileScreen extends StatelessWidget {
                     ),
                   )
                   .toList(),
+            ),
+            const SizedBox(height: 12),
+            ListTile(
+              title: Text(texts.translate('wellness_hub')),
+              subtitle: Text(texts.translate('wellness_settings_hint')),
+              leading: const Icon(Icons.self_improvement),
+              trailing: const Icon(Icons.chevron_right),
+              onTap: () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (_) => WellnessHubScreen(controller: dietController),
+                  ),
+                );
+              },
             ),
             const SizedBox(height: 24),
             ElevatedButton(

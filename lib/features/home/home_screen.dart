@@ -9,6 +9,7 @@ import '../../data/mock_food_items.dart';
 import '../../models/food_item.dart';
 import '../catalog/food_detail_screen.dart';
 import '../plan/meal_plan_screen.dart';
+import '../wellness/wellness_hub_screen.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key, required this.dietController});
@@ -122,6 +123,62 @@ class HomeScreen extends StatelessWidget {
                           ],
                         ),
                       ).animate().fadeIn(duration: 500.ms).slideY(begin: .2),
+                      const SizedBox(height: 16),
+                      GestureDetector(
+                        onTap: () {
+                          Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (_) => WellnessHubScreen(
+                                controller: dietController,
+                              ),
+                            ),
+                          );
+                        },
+                        child: Container(
+                          width: double.infinity,
+                          padding: const EdgeInsets.all(20),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(28),
+                            gradient: LinearGradient(
+                              colors: [
+                                Theme.of(context)
+                                    .colorScheme
+                                    .primary
+                                    .withOpacity(.5),
+                                Theme.of(context)
+                                    .colorScheme
+                                    .secondary
+                                    .withOpacity(.2),
+                              ],
+                              begin: Alignment.topCenter,
+                              end: Alignment.bottomCenter,
+                            ),
+                          ),
+                          child: Row(
+                            children: [
+                              Expanded(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(texts.translate('wellness_hub'),
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .titleLarge),
+                                    const SizedBox(height: 6),
+                                    Text(
+                                      texts.translate('wellness_preview'),
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .bodyMedium,
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              const Icon(Icons.self_improvement, size: 42),
+                            ],
+                          ),
+                        ),
+                      ).animate().fadeIn(delay: 200.ms).slideX(begin: -.1),
                       const SizedBox(height: 24),
                       SectionTitle(title: texts.translate('catalog')),
                       SizedBox(

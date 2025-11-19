@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:math';
 
 import 'package:flutter/material.dart';
 
@@ -23,6 +24,19 @@ class DietController extends ChangeNotifier {
   int _page = 0;
   final int _pageSize = 6;
   bool _loading = false;
+  final double _hydrationTarget = 2400;
+  double _hydrationConsumed = 1200;
+  int _moodLevel = 3;
+  final List<String> _reflections = [
+    'Feeling lighter after sticking to greens today.',
+    'Focused breathing helped reduce afternoon cravings.',
+  ];
+  final List<String> _mindfulStories = [
+    'Imagine a neon sunrise as you sip your smoothie; match your breath to its glow.',
+    'Stretch your spine before logging meals — create space for mindful bites.',
+    'Pick one color for today\'s plate and celebrate it in every dish.',
+    'Slow down the first sip, notice texture, temperature, scent.',
+  ];
 
   List<FoodItem> get visibleItems => List.unmodifiable(_visibleItems);
   Set<String> get comparisonIds => _comparisonIds;
@@ -31,6 +45,13 @@ class DietController extends ChangeNotifier {
   bool get loading => _loading;
   WeeklyStats get currentWeek => _weekly[_currentWeekIndex];
   int _currentWeekIndex = 0;
+  double get hydrationProgress =>
+      (_hydrationConsumed / _hydrationTarget).clamp(0, 1);
+  double get hydrationConsumed => _hydrationConsumed;
+  double get hydrationTarget => _hydrationTarget;
+  int get moodLevel => _moodLevel;
+  List<String> get reflections => List.unmodifiable(_reflections);
+  List<String> get mindfulStories => List.unmodifiable(_mindfulStories);
 
   void init() {
     _applyFilters(reset: true);
@@ -113,6 +134,36 @@ class DietController extends ChangeNotifier {
 
   void clearComparison() {
     _comparisonIds.clear();
+    notifyListeners();
+  }
+
+  void logHydration(double ml) {
+    _hydrationConsumed = min(_hydrationConsumed + ml, _hydrationTarget);
+    notifyListeners();
+  }
+
+  void resetHydration() {
+    _hydrationConsumed = 0;
+    notifyListeners();
+  }
+
+  void updateMood(int level) {
+    _moodLevel = level.clamp(1, 5);
+    notifyListeners();
+  }
+
+  void addReflection(String text) {
+    final cleaned = text.trim();
+    if (cleaned.isEmpty) return;
+    _reflections.insert(0, cleaned);
+    if (_reflections.length > 10) {
+      _reflections.removeLast();
+    }
+    notifyListeners();
+  }
+
+  void refreshMindfulStories() {
+    _mindfulStories.shuffle(Random());
     notifyListeners();
   }
 
