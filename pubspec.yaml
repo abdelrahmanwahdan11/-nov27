@@ -1,0 +1,21 @@
+name: neon_diet
+description: Mobile-first calorie tracking experience with neon gradient theme.
+publish_to: 'none'
+version: 1.0.0+1
+environment:
+  sdk: '>=3.3.0 <4.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+  cupertino_icons: ^1.0.6
+  google_fonts: any
+  shared_preferences: any
+  iconly: any
+  flutter_animate: any
+  intl: any
+
+flutter:
+  uses-material-design: true
+  assets:
+    - assets/l10n/
