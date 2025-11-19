@@ -11,6 +11,9 @@ import '../grocery/grocery_planner_screen.dart';
 import '../habits/habit_studio_screen.dart';
 import '../insights/insights_screen.dart';
 import '../recipes/recipe_lab_screen.dart';
+import '../recovery/recovery_suite_screen.dart';
+import '../rewards/rewards_vault_screen.dart';
+import '../rituals/ritual_builder_screen.dart';
 import '../wellness/wellness_hub_screen.dart';
 
 class ProfileScreen extends StatelessWidget {
@@ -112,6 +115,21 @@ class ProfileScreen extends StatelessWidget {
               },
             ),
             ListTile(
+              title: Text(texts.translate('recovery_suite')),
+              subtitle: Text(texts.translate('recovery_intro')),
+              leading: const Icon(Icons.nightlight_round),
+              trailing: const Icon(Icons.chevron_right),
+              onTap: () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (_) => RecoverySuiteScreen(
+                      controller: dietController,
+                    ),
+                  ),
+                );
+              },
+            ),
+            ListTile(
               title: Text(texts.translate('habit_studio')),
               subtitle: Text(texts.translate('habit_settings_hint')),
               leading: const Icon(Icons.refresh_rounded),
@@ -120,6 +138,21 @@ class ProfileScreen extends StatelessWidget {
                 Navigator.of(context).push(
                   MaterialPageRoute(
                     builder: (_) => HabitStudioScreen(controller: dietController),
+                  ),
+                );
+              },
+            ),
+            ListTile(
+              title: Text(texts.translate('ritual_builder')),
+              subtitle: Text(texts.translate('ritual_intro')),
+              leading: const Icon(Icons.auto_fix_high),
+              trailing: const Icon(Icons.chevron_right),
+              onTap: () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (_) => RitualBuilderScreen(
+                      controller: dietController,
+                    ),
                   ),
                 );
               },
@@ -187,6 +220,21 @@ class ProfileScreen extends StatelessWidget {
                 Navigator.of(context).push(
                   MaterialPageRoute(
                     builder: (_) => InsightsScreen(controller: dietController),
+                  ),
+                );
+              },
+            ),
+            ListTile(
+              title: Text(texts.translate('rewards_vault')),
+              subtitle: Text(texts.translate('rewards_intro')),
+              leading: const Icon(Icons.emoji_events),
+              trailing: const Icon(Icons.chevron_right),
+              onTap: () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (_) => RewardsVaultScreen(
+                      controller: dietController,
+                    ),
                   ),
                 );
               },

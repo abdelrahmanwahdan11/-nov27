@@ -212,6 +212,120 @@ class DietController extends ChangeNotifier {
       trend: .05,
     ),
   ];
+  final List<RecoverySession> _recoverySessions = [
+    RecoverySession(
+      id: 'lunar_rest',
+      titleEn: 'Lunar rest',
+      titleAr: 'استراحة قمرية',
+      descriptionEn: 'Slow inhale, sip chamomile, journal a neon thought.',
+      descriptionAr: 'تنفس ببطء واشرب البابونج وسجل فكرة متوهجة.',
+      duration: const Duration(minutes: 8),
+      energy: .35,
+      tags: const ['breath', 'tea', 'journal'],
+    ),
+    RecoverySession(
+      id: 'glow_walk',
+      titleEn: 'Glow walk reset',
+      titleAr: 'تنشيط مشي متوهج',
+      descriptionEn: 'Step outside for 6 minutes and match breath with pace.',
+      descriptionAr: 'اخرج لست دقائق وطابق التنفس مع الخطوات.',
+      duration: const Duration(minutes: 6),
+      energy: .5,
+      tags: const ['movement', 'focus'],
+    ),
+    RecoverySession(
+      id: 'orbit_nap',
+      titleEn: 'Orbit nap',
+      titleAr: 'غفوة المدار',
+      descriptionEn: 'Close eyes, inhale for 4, hold 2, exhale 6.',
+      descriptionAr: 'أغمض عينيك، شهيق 4، احتفاظ 2، زفير 6.',
+      duration: const Duration(minutes: 12),
+      energy: .62,
+      tags: const ['breath', 'calm'],
+    ),
+  ];
+  final List<RitualBlueprint> _rituals = [
+    RitualBlueprint(
+      id: 'dawn_flow',
+      titleEn: 'Dawn flow',
+      titleAr: 'تدفق الفجر',
+      descriptionEn: 'Hydrate, stretch and visualize the neon day.',
+      descriptionAr: 'ترطيب وتمدد وتخيل يومك المتوهج.',
+      focus: .6,
+      steps: [
+        RitualStep(
+          labelEn: '400 ml glow water',
+          labelAr: '400 مل من ماء التوهج',
+        ),
+        RitualStep(
+          labelEn: 'Two shoulder rolls',
+          labelAr: 'دورتان للكتفين',
+        ),
+        RitualStep(
+          labelEn: 'Set intention mantra',
+          labelAr: 'ضع تعويذة النية',
+        ),
+      ],
+    ),
+    RitualBlueprint(
+      id: 'noon_focus',
+      titleEn: 'Noon focus',
+      titleAr: 'تركيز الظهيرة',
+      descriptionEn: 'Micro walk + mindful bite to avoid energy crash.',
+      descriptionAr: 'مشي قصير ولقمة واعية لتجنب هبوط الطاقة.',
+      focus: .45,
+      steps: [
+        RitualStep(
+          labelEn: 'Stand up + stretch',
+          labelAr: 'قف وتمدد',
+        ),
+        RitualStep(
+          labelEn: 'Breathe 4-4-4',
+          labelAr: 'تنفس 4-4-4',
+        ),
+        RitualStep(
+          labelEn: 'Crunchy veggie snack',
+          labelAr: 'وجبة خضار مقرمشة',
+        ),
+      ],
+    ),
+  ];
+  final List<RewardBadge> _rewards = [
+    RewardBadge(
+      id: 'hydration_wave',
+      titleEn: 'Hydration wave',
+      titleAr: 'موجة الترطيب',
+      descriptionEn: 'Log hydration 3 days in a row.',
+      descriptionAr: 'سجل الترطيب لثلاثة أيام متتالية.',
+      points: 120,
+      unlocked: true,
+    ),
+    RewardBadge(
+      id: 'macro_artist',
+      titleEn: 'Macro artist',
+      titleAr: 'فنان المغذيات',
+      descriptionEn: 'Balance macros for five meals.',
+      descriptionAr: 'وازن المغذيات لخمسة وجبات.',
+      points: 180,
+    ),
+    RewardBadge(
+      id: 'calm_commander',
+      titleEn: 'Calm commander',
+      titleAr: 'قائد الهدوء',
+      descriptionEn: 'Finish two recovery sessions in a day.',
+      descriptionAr: 'أكمل جلستي استرخاء في يوم واحد.',
+      points: 160,
+    ),
+    RewardBadge(
+      id: 'sharing_star',
+      titleEn: 'Sharing star',
+      titleAr: 'نجم المشاركة',
+      descriptionEn: 'Add three reflections.',
+      descriptionAr: 'أضف ثلاث مذكرات.',
+      points: 90,
+    ),
+  ];
+  int _customRecoveryCounter = 0;
   final List<String> _insightHighlights = [
     'Macros held steady for 4 dinners.',
     'Hydration streak unlocked neon clarity.',
@@ -239,6 +353,10 @@ class DietController extends ChangeNotifier {
   List<WellnessHabit> get habits => List.unmodifiable(_habits);
   List<GroceryItem> get groceryItems => List.unmodifiable(_groceries);
   List<InsightCard> get insightCards => List.unmodifiable(_insights);
+  List<RecoverySession> get recoverySessions =>
+      List.unmodifiable(_recoverySessions);
+  List<RitualBlueprint> get ritualBlueprints => List.unmodifiable(_rituals);
+  List<RewardBadge> get rewardBadges => List.unmodifiable(_rewards);
   List<String> get insightHighlights => List.unmodifiable(_insightHighlights);
 
   void init() {
@@ -349,6 +467,81 @@ class DietController extends ChangeNotifier {
     }
     notifyListeners();
   }
+
+  void toggleRecovery(String id) {
+    final session = _recoverySessions.firstWhere((element) => element.id == id);
+    session.completed = !session.completed;
+    notifyListeners();
+  }
+
+  void updateRecoveryEnergy(String id, double value) {
+    final session = _recoverySessions.firstWhere((element) => element.id == id);
+    session.energy = value.clamp(0, 1);
+    notifyListeners();
+  }
+
+  void shuffleRecoverySessions() {
+    _recoverySessions.shuffle(Random());
+    notifyListeners();
+  }
+
+  void addCustomRecoverySession() {
+    _customRecoveryCounter++;
+    _recoverySessions.add(
+      RecoverySession(
+        id: 'custom_$_customRecoveryCounter',
+        titleEn: 'Glow pause $_customRecoveryCounter',
+        titleAr: 'وقفة متوهجة $_customRecoveryCounter',
+        descriptionEn: 'Sip water, breathe, jot one gratitude.',
+        descriptionAr: 'اشرب ماء وتنفس ودون امتناناً واحداً.',
+        duration: Duration(minutes: 5 + _customRecoveryCounter),
+        energy: .4 + ((_customRecoveryCounter % 4) * .1),
+        tags: const ['gratitude', 'calm'],
+      ),
+    );
+    notifyListeners();
+  }
+
+  void updateRitualFocus(String id, double focus) {
+    final ritual = _rituals.firstWhere((element) => element.id == id);
+    ritual.focus = focus.clamp(0, 1);
+    notifyListeners();
+  }
+
+  void toggleRitualStep(String id, int index) {
+    final ritual = _rituals.firstWhere((element) => element.id == id);
+    if (index < 0 || index >= ritual.steps.length) return;
+    ritual.steps[index].completed = !ritual.steps[index].completed;
+    notifyListeners();
+  }
+
+  void addRitualStep(String id, String label) {
+    final trimmed = label.trim();
+    if (trimmed.isEmpty) return;
+    final ritual = _rituals.firstWhere((element) => element.id == id);
+    ritual.steps.add(
+      RitualStep(
+        labelEn: trimmed,
+        labelAr: trimmed,
+      ),
+    );
+    notifyListeners();
+  }
+
+  void unlockReward(String id) {
+    final reward = _rewards.firstWhere((element) => element.id == id);
+    if (reward.unlocked) return;
+    reward.unlocked = true;
+    notifyListeners();
+  }
+
+  int get unlockedRewards =>
+      _rewards.where((element) => element.unlocked).length;
+
+  int get totalVaultPoints => _rewards.fold(
+      0,
+      (previousValue, element) =>
+          previousValue + (element.unlocked ? element.points : 0));
 
   void refreshMindfulStories() {
     _mindfulStories.shuffle(Random());

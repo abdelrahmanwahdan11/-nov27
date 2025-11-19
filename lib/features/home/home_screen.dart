@@ -15,6 +15,9 @@ import '../habits/habit_studio_screen.dart';
 import '../insights/insights_screen.dart';
 import '../plan/meal_plan_screen.dart';
 import '../recipes/recipe_lab_screen.dart';
+import '../recovery/recovery_suite_screen.dart';
+import '../rewards/rewards_vault_screen.dart';
+import '../rituals/ritual_builder_screen.dart';
 import '../wellness/wellness_hub_screen.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -262,6 +265,45 @@ class HomeScreen extends StatelessWidget {
                               Navigator.of(context).push(
                                 MaterialPageRoute(
                                   builder: (_) => HabitStudioScreen(
+                                    controller: dietController,
+                                  ),
+                                ),
+                              );
+                            },
+                          ),
+                          _HomeActionTile(
+                            icon: Icons.nightlight_round,
+                            label: texts.translate('recovery_cta'),
+                            onTap: () {
+                              Navigator.of(context).push(
+                                MaterialPageRoute(
+                                  builder: (_) => RecoverySuiteScreen(
+                                    controller: dietController,
+                                  ),
+                                ),
+                              );
+                            },
+                          ),
+                          _HomeActionTile(
+                            icon: Icons.auto_fix_high,
+                            label: texts.translate('ritual_cta'),
+                            onTap: () {
+                              Navigator.of(context).push(
+                                MaterialPageRoute(
+                                  builder: (_) => RitualBuilderScreen(
+                                    controller: dietController,
+                                  ),
+                                ),
+                              );
+                            },
+                          ),
+                          _HomeActionTile(
+                            icon: Icons.emoji_events,
+                            label: texts.translate('rewards_cta'),
+                            onTap: () {
+                              Navigator.of(context).push(
+                                MaterialPageRoute(
+                                  builder: (_) => RewardsVaultScreen(
                                     controller: dietController,
                                   ),
                                 ),

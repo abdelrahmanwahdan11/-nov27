@@ -83,3 +83,100 @@ class InsightCard {
   String localizedMetricLabel(Locale locale) =>
       locale.languageCode == 'ar' ? metricLabelAr : metricLabelEn;
 }
+
+class RecoverySession {
+  RecoverySession({
+    required this.id,
+    required this.titleEn,
+    required this.titleAr,
+    required this.descriptionEn,
+    required this.descriptionAr,
+    required this.duration,
+    required this.tags,
+    this.energy = .5,
+    this.completed = false,
+  });
+
+  final String id;
+  final String titleEn;
+  final String titleAr;
+  final String descriptionEn;
+  final String descriptionAr;
+  final Duration duration;
+  final List<String> tags;
+  double energy;
+  bool completed;
+
+  String localizedTitle(Locale locale) =>
+      locale.languageCode == 'ar' ? titleAr : titleEn;
+
+  String localizedDescription(Locale locale) =>
+      locale.languageCode == 'ar' ? descriptionAr : descriptionEn;
+}
+
+class RitualStep {
+  RitualStep({
+    required this.labelEn,
+    required this.labelAr,
+    this.completed = false,
+  });
+
+  final String labelEn;
+  final String labelAr;
+  bool completed;
+
+  String localizedLabel(Locale locale) =>
+      locale.languageCode == 'ar' ? labelAr : labelEn;
+}
+
+class RitualBlueprint {
+  RitualBlueprint({
+    required this.id,
+    required this.titleEn,
+    required this.titleAr,
+    required this.descriptionEn,
+    required this.descriptionAr,
+    required this.steps,
+    this.focus = .5,
+  });
+
+  final String id;
+  final String titleEn;
+  final String titleAr;
+  final String descriptionEn;
+  final String descriptionAr;
+  final List<RitualStep> steps;
+  double focus;
+
+  String localizedTitle(Locale locale) =>
+      locale.languageCode == 'ar' ? titleAr : titleEn;
+
+  String localizedDescription(Locale locale) =>
+      locale.languageCode == 'ar' ? descriptionAr : descriptionEn;
+}
+
+class RewardBadge {
+  RewardBadge({
+    required this.id,
+    required this.titleEn,
+    required this.titleAr,
+    required this.descriptionEn,
+    required this.descriptionAr,
+    required this.points,
+    this.unlocked = false,
+  });
+
+  final String id;
+  final String titleEn;
+  final String titleAr;
+  final String descriptionEn;
+  final String descriptionAr;
+  final int points;
+  bool unlocked;
+
+  String localizedTitle(Locale locale) =>
+      locale.languageCode == 'ar' ? titleAr : titleEn;
+
+  String localizedDescription(Locale locale) =>
+      locale.languageCode == 'ar' ? descriptionAr : descriptionEn;
+}

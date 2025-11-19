@@ -9,6 +9,8 @@ import '../../models/weekly_stats.dart';
 import '../coach/coach_chat_screen.dart';
 import '../community/community_challenges_screen.dart';
 import '../insights/insights_screen.dart';
+import '../recovery/recovery_suite_screen.dart';
+import '../rewards/rewards_vault_screen.dart';
 import 'journey_timeline_screen.dart';
 
 class ProgressScreen extends StatefulWidget {
@@ -166,6 +168,43 @@ class _ProgressScreenState extends State<ProgressScreen> {
                         Navigator.of(context).push(
                           MaterialPageRoute(
                             builder: (_) => CoachChatScreen(
+                              controller: widget.controller,
+                            ),
+                          ),
+                        );
+                      },
+                    ),
+                  ),
+                ],
+              ).animate().fadeIn(duration: 500.ms).slideY(begin: .1),
+            if (!loading) const SizedBox(height: 12),
+            if (!loading)
+              Row(
+                children: [
+                  Expanded(
+                    child: _ProgressShortcut(
+                      icon: Icons.nightlight_round,
+                      label: texts.translate('recovery_cta'),
+                      onTap: () {
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (_) => RecoverySuiteScreen(
+                              controller: widget.controller,
+                            ),
+                          ),
+                        );
+                      },
+                    ),
+                  ),
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: _ProgressShortcut(
+                      icon: Icons.emoji_events,
+                      label: texts.translate('rewards_cta'),
+                      onTap: () {
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (_) => RewardsVaultScreen(
                               controller: widget.controller,
                             ),
                           ),
