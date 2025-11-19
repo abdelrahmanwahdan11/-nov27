@@ -10,6 +10,9 @@ import '../../models/food_item.dart';
 import '../catalog/food_detail_screen.dart';
 import '../coach/coach_chat_screen.dart';
 import '../community/community_challenges_screen.dart';
+import '../grocery/grocery_planner_screen.dart';
+import '../habits/habit_studio_screen.dart';
+import '../insights/insights_screen.dart';
 import '../plan/meal_plan_screen.dart';
 import '../recipes/recipe_lab_screen.dart';
 import '../wellness/wellness_hub_screen.dart';
@@ -226,6 +229,45 @@ class HomeScreen extends StatelessWidget {
                               );
                             },
                           ),
+                          _HomeActionTile(
+                            icon: Icons.auto_graph,
+                            label: texts.translate('insights_cta'),
+                            onTap: () {
+                              Navigator.of(context).push(
+                                MaterialPageRoute(
+                                  builder: (_) => InsightsScreen(
+                                    controller: dietController,
+                                  ),
+                                ),
+                              );
+                            },
+                          ),
+                          _HomeActionTile(
+                            icon: Icons.shopping_bag_outlined,
+                            label: texts.translate('grocery_cta'),
+                            onTap: () {
+                              Navigator.of(context).push(
+                                MaterialPageRoute(
+                                  builder: (_) => GroceryPlannerScreen(
+                                    controller: dietController,
+                                  ),
+                                ),
+                              );
+                            },
+                          ),
+                          _HomeActionTile(
+                            icon: Icons.refresh_rounded,
+                            label: texts.translate('habit_cta'),
+                            onTap: () {
+                              Navigator.of(context).push(
+                                MaterialPageRoute(
+                                  builder: (_) => HabitStudioScreen(
+                                    controller: dietController,
+                                  ),
+                                ),
+                              );
+                            },
+                          ),
                         ],
                       ).animate().fadeIn(delay: 300.ms).slideY(begin: .1),
                       const SizedBox(height: 24),
@@ -384,3 +426,42 @@ class _WeekChart extends StatelessWidget {
     );
   }
 }
+                          _HomeActionTile(
+                            icon: Icons.auto_graph,
+                            label: texts.translate('insights_cta'),
+                            onTap: () {
+                              Navigator.of(context).push(
+                                MaterialPageRoute(
+                                  builder: (_) => InsightsScreen(
+                                    controller: dietController,
+                                  ),
+                                ),
+                              );
+                            },
+                          ),
+                          _HomeActionTile(
+                            icon: Icons.shopping_bag_outlined,
+                            label: texts.translate('grocery_cta'),
+                            onTap: () {
+                              Navigator.of(context).push(
+                                MaterialPageRoute(
+                                  builder: (_) => GroceryPlannerScreen(
+                                    controller: dietController,
+                                  ),
+                                ),
+                              );
+                            },
+                          ),
+                          _HomeActionTile(
+                            icon: Icons.refresh_rounded,
+                            label: texts.translate('habit_cta'),
+                            onTap: () {
+                              Navigator.of(context).push(
+                                MaterialPageRoute(
+                                  builder: (_) => HabitStudioScreen(
+                                    controller: dietController,
+                                  ),
+                                ),
+                              );
+                            },
+                          ),

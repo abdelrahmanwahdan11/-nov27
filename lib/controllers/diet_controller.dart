@@ -9,6 +9,7 @@ import '../data/mock_stats.dart';
 import '../models/community_models.dart';
 import '../models/food_item.dart';
 import '../models/weekly_stats.dart';
+import '../models/wellness_models.dart';
 
 class DietController extends ChangeNotifier {
   DietController();
@@ -121,6 +122,102 @@ class DietController extends ChangeNotifier {
       sparkle: .65,
     ),
   ];
+  final List<WellnessHabit> _habits = [
+    WellnessHabit(
+      id: 'sun_sip',
+      titleEn: 'Sunrise sip',
+      titleAr: 'جرعة الشروق',
+      descriptionEn: 'Drink 400 ml before checking notifications.',
+      descriptionAr: 'اشرب 400 مل قبل فتح الهاتف.',
+      schedule: const ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'],
+      focus: .7,
+      streak: 6,
+    ),
+    WellnessHabit(
+      id: 'walk_wrap',
+      titleEn: 'Walk wrap-up',
+      titleAr: 'ختام بالمشي',
+      descriptionEn: '5-minute stroll after dinner to calm cravings.',
+      descriptionAr: 'تمشى لخمس دقائق بعد العشاء لتهدئة الشهية.',
+      schedule: const ['Daily'],
+      focus: .5,
+      streak: 12,
+    ),
+    WellnessHabit(
+      id: 'color_plate',
+      titleEn: 'Color plate',
+      titleAr: 'طبق الألوان',
+      descriptionEn: 'Add a neon color veggie to every plate.',
+      descriptionAr: 'أضف خضاراً بلون لامع لكل طبق.',
+      schedule: const ['Mon', 'Wed', 'Fri'],
+      focus: .6,
+      streak: 4,
+    ),
+  ];
+  final List<GroceryItem> _groceries = [
+    GroceryItem(
+      id: 'spinach',
+      nameEn: 'Baby spinach',
+      nameAr: 'سبانخ طازجة',
+      category: 'Fresh',
+      quantity: 2,
+    ),
+    GroceryItem(
+      id: 'chia',
+      nameEn: 'Chia seeds',
+      nameAr: 'بذور الشيا',
+      category: 'Pantry',
+      quantity: 1,
+    ),
+    GroceryItem(
+      id: 'coconut',
+      nameEn: 'Coconut water',
+      nameAr: 'ماء جوز الهند',
+      category: 'Drinks',
+      quantity: 3,
+    ),
+  ];
+  final List<InsightCard> _insights = [
+    InsightCard(
+      id: 'macro_balance',
+      titleEn: 'Macro balance',
+      titleAr: 'توازن المغذيات',
+      bodyEn: 'Protein is holding 32% of today\'s energy. Keep colors in plates.',
+      bodyAr: 'البروتين يشكل 32٪ من طاقتك اليوم. استمر في الألوان.',
+      metricLabelEn: 'Balanced plates',
+      metricLabelAr: 'أطباق متوازنة',
+      metric: .72,
+      trend: .12,
+    ),
+    InsightCard(
+      id: 'hydration_wave',
+      titleEn: 'Hydration wave',
+      titleAr: 'موجة الترطيب',
+      bodyEn: 'Night hydration improved 2 evenings in a row.',
+      bodyAr: 'ترطيب المساء تحسن لليلتين متتاليتين.',
+      metricLabelEn: 'Glow glasses',
+      metricLabelAr: 'أكواب اللمعان',
+      metric: .58,
+      trend: .08,
+    ),
+    InsightCard(
+      id: 'mindful_energy',
+      titleEn: 'Mindful energy',
+      titleAr: 'طاقة يقظة',
+      bodyEn: 'Breathing pauses trimmed stress spikes this week.',
+      bodyAr: 'فترات التنفس خففت التوتر هذا الأسبوع.',
+      metricLabelEn: 'Calm minutes',
+      metricLabelAr: 'دقائق الهدوء',
+      metric: .64,
+      trend: .05,
+    ),
+  ];
+  final List<String> _insightHighlights = [
+    'Macros held steady for 4 dinners.',
+    'Hydration streak unlocked neon clarity.',
+    'Mindful walks kept cravings below target.',
+    'Fiber bowls added an extra 9g yesterday.',
+  ];
 
   List<FoodItem> get visibleItems => List.unmodifiable(_visibleItems);
   Set<String> get comparisonIds => _comparisonIds;
@@ -139,6 +236,10 @@ class DietController extends ChangeNotifier {
   List<ChallengeRoutine> get challenges => List.unmodifiable(_challenges);
   List<CoachMessage> get coachMessages => List.unmodifiable(_coachMessages);
   List<RecipeIdea> get recipeIdeas => List.unmodifiable(_recipes);
+  List<WellnessHabit> get habits => List.unmodifiable(_habits);
+  List<GroceryItem> get groceryItems => List.unmodifiable(_groceries);
+  List<InsightCard> get insightCards => List.unmodifiable(_insights);
+  List<String> get insightHighlights => List.unmodifiable(_insightHighlights);
 
   void init() {
     _applyFilters(reset: true);
@@ -309,6 +410,69 @@ class DietController extends ChangeNotifier {
   void updateRecipeSparkle(String id, double sparkle) {
     final recipe = _recipes.firstWhere((r) => r.id == id);
     recipe.sparkle = sparkle.clamp(0, 1);
+    notifyListeners();
+  }
+
+  void toggleHabit(String id) {
+    final habit = _habits.firstWhere((h) => h.id == id);
+    habit.enabled = !habit.enabled;
+    notifyListeners();
+  }
+
+  void setHabitFocus(String id, double focus) {
+    final habit = _habits.firstWhere((h) => h.id == id);
+    habit.focus = focus;
+    notifyListeners();
+  }
+
+  void boostHabitStreak(String id) {
+    final habit = _habits.firstWhere((h) => h.id == id);
+    habit.streak++;
+    notifyListeners();
+  }
+
+  void toggleGroceryPurchased(String id) {
+    final item = _groceries.firstWhere((g) => g.id == id);
+    item.purchased = !item.purchased;
+    notifyListeners();
+  }
+
+  void updateGroceryQuantity(String id, int delta) {
+    final item = _groceries.firstWhere((g) => g.id == id);
+    item.quantity = (item.quantity + delta).clamp(1, 12);
+    notifyListeners();
+  }
+
+  void addGroceryItem({
+    required String nameEn,
+    required String nameAr,
+    String category = 'Fresh',
+    int quantity = 1,
+  }) {
+    final newItem = GroceryItem(
+      id: UniqueKey().toString(),
+      nameEn: nameEn,
+      nameAr: nameAr,
+      category: category,
+      quantity: quantity,
+    );
+    _groceries.insert(0, newItem);
+    notifyListeners();
+  }
+
+  void removeGroceryItem(String id) {
+    _groceries.removeWhere((g) => g.id == id);
+    notifyListeners();
+  }
+
+  void refreshInsights() {
+    final rng = Random();
+    for (final card in _insights) {
+      card.trend = (card.trend + rng.nextDouble() * .2 - .1).clamp(-1, 1);
+      card.metric = (card.metric + rng.nextDouble() * .2 - .1).clamp(0, 1);
+    }
+    _insights.shuffle(rng);
+    _insightHighlights.shuffle(rng);
     notifyListeners();
   }
 

@@ -7,6 +7,9 @@ import '../../core/localization/app_localizations.dart';
 import '../../core/theme/app_theme.dart';
 import '../coach/coach_chat_screen.dart';
 import '../community/community_challenges_screen.dart';
+import '../grocery/grocery_planner_screen.dart';
+import '../habits/habit_studio_screen.dart';
+import '../insights/insights_screen.dart';
 import '../recipes/recipe_lab_screen.dart';
 import '../wellness/wellness_hub_screen.dart';
 
@@ -109,6 +112,19 @@ class ProfileScreen extends StatelessWidget {
               },
             ),
             ListTile(
+              title: Text(texts.translate('habit_studio')),
+              subtitle: Text(texts.translate('habit_settings_hint')),
+              leading: const Icon(Icons.refresh_rounded),
+              trailing: const Icon(Icons.chevron_right),
+              onTap: () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (_) => HabitStudioScreen(controller: dietController),
+                  ),
+                );
+              },
+            ),
+            ListTile(
               title: Text(texts.translate('coach_chat')),
               subtitle: Text(texts.translate('coach_intro')),
               leading: const Icon(Icons.chat),
@@ -145,6 +161,32 @@ class ProfileScreen extends StatelessWidget {
                 Navigator.of(context).push(
                   MaterialPageRoute(
                     builder: (_) => RecipeLabScreen(controller: dietController),
+                  ),
+                );
+              },
+            ),
+            ListTile(
+              title: Text(texts.translate('grocery_planner')),
+              subtitle: Text(texts.translate('grocery_intro')),
+              leading: const Icon(Icons.shopping_bag_outlined),
+              trailing: const Icon(Icons.chevron_right),
+              onTap: () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (_) => GroceryPlannerScreen(controller: dietController),
+                  ),
+                );
+              },
+            ),
+            ListTile(
+              title: Text(texts.translate('insights')),
+              subtitle: Text(texts.translate('insights_intro')),
+              leading: const Icon(Icons.auto_graph),
+              trailing: const Icon(Icons.chevron_right),
+              onTap: () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (_) => InsightsScreen(controller: dietController),
                   ),
                 );
               },

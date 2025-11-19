@@ -8,6 +8,7 @@ import '../../core/widgets/skeleton.dart';
 import '../../models/weekly_stats.dart';
 import '../coach/coach_chat_screen.dart';
 import '../community/community_challenges_screen.dart';
+import '../insights/insights_screen.dart';
 import 'journey_timeline_screen.dart';
 
 class ProgressScreen extends StatefulWidget {
@@ -91,6 +92,22 @@ class _ProgressScreenState extends State<ProgressScreen> {
                   .animate()
                   .fadeIn(duration: 400.ms)
                   .slideY(begin: .2),
+            const SizedBox(height: 16),
+            if (loading)
+              const Skeleton(height: 48)
+            else
+              PrimaryButton(
+                label: texts.translate('insights_button'),
+                onPressed: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (_) => InsightsScreen(
+                        controller: widget.controller,
+                      ),
+                    ),
+                  );
+                },
+              ).animate().fadeIn(duration: 400.ms).slideY(begin: .1),
             const SizedBox(height: 24),
             Container(
               padding: const EdgeInsets.all(20),
