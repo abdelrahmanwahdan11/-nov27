@@ -8,7 +8,10 @@ import '../../core/widgets/section_title.dart';
 import '../../data/mock_food_items.dart';
 import '../../models/food_item.dart';
 import '../catalog/food_detail_screen.dart';
+import '../coach/coach_chat_screen.dart';
+import '../community/community_challenges_screen.dart';
 import '../plan/meal_plan_screen.dart';
+import '../recipes/recipe_lab_screen.dart';
 import '../wellness/wellness_hub_screen.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -179,6 +182,52 @@ class HomeScreen extends StatelessWidget {
                           ),
                         ),
                       ).animate().fadeIn(delay: 200.ms).slideX(begin: -.1),
+                      const SizedBox(height: 20),
+                      Wrap(
+                        spacing: 12,
+                        runSpacing: 12,
+                        children: [
+                          _HomeActionTile(
+                            icon: Icons.flag_rounded,
+                            label: texts.translate('community_cta'),
+                            onTap: () {
+                              Navigator.of(context).push(
+                                MaterialPageRoute(
+                                  builder: (_) => CommunityChallengesScreen(
+                                    controller: dietController,
+                                  ),
+                                ),
+                              );
+                            },
+                          ),
+                          _HomeActionTile(
+                            icon: Icons.blender,
+                            label: texts.translate('recipe_cta'),
+                            onTap: () {
+                              Navigator.of(context).push(
+                                MaterialPageRoute(
+                                  builder: (_) => RecipeLabScreen(
+                                    controller: dietController,
+                                  ),
+                                ),
+                              );
+                            },
+                          ),
+                          _HomeActionTile(
+                            icon: Icons.chat_bubble_outline,
+                            label: texts.translate('coach_cta'),
+                            onTap: () {
+                              Navigator.of(context).push(
+                                MaterialPageRoute(
+                                  builder: (_) => CoachChatScreen(
+                                    controller: dietController,
+                                  ),
+                                ),
+                              );
+                            },
+                          ),
+                        ],
+                      ).animate().fadeIn(delay: 300.ms).slideY(begin: .1),
                       const SizedBox(height: 24),
                       SectionTitle(title: texts.translate('catalog')),
                       SizedBox(
@@ -204,6 +253,41 @@ class HomeScreen extends StatelessWidget {
           ),
         );
       },
+    );
+  }
+}
+
+class _HomeActionTile extends StatelessWidget {
+  const _HomeActionTile({
+    required this.icon,
+    required this.label,
+    required this.onTap,
+  });
+
+  final IconData icon;
+  final String label;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        width: MediaQuery.of(context).size.width / 2 - 36,
+        padding: const EdgeInsets.all(16),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(24),
+          color: Theme.of(context).colorScheme.surfaceVariant.withOpacity(.4),
+        ),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(icon),
+            const SizedBox(width: 12),
+            Expanded(child: Text(label)),
+          ],
+        ),
+      ),
     );
   }
 }

@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import '../core/localization/app_localizations.dart';
 import '../data/mock_food_items.dart';
 import '../data/mock_stats.dart';
+import '../models/community_models.dart';
 import '../models/food_item.dart';
 import '../models/weekly_stats.dart';
 
@@ -37,6 +38,89 @@ class DietController extends ChangeNotifier {
     'Pick one color for today\'s plate and celebrate it in every dish.',
     'Slow down the first sip, notice texture, temperature, scent.',
   ];
+  final List<ChallengeRoutine> _challenges = [
+    ChallengeRoutine(
+      id: 'rise_glow',
+      titleEn: 'Rise & Glow Hydration',
+      titleAr: 'ترطيب الصباح المضيء',
+      descriptionEn: 'Drink 3 neon glasses before noon and log mindful breaths.',
+      descriptionAr: 'اشرب ثلاث أكواب قبل الظهر وسجل أنفاساً هادئة.',
+      days: 5,
+      reward: 'Glow badge',
+      completedDays: 2,
+    ),
+    ChallengeRoutine(
+      id: 'fiber_flow',
+      titleEn: 'Fiber Flow Bowls',
+      titleAr: 'أوعية الألياف',
+      descriptionEn: 'Pack veggies in two meals each day and track satiety.',
+      descriptionAr: 'أضف الخضار لوجبتين يومياً وتابع الشبع.',
+      days: 7,
+      reward: 'Fiber aura',
+      completedDays: 4,
+    ),
+    ChallengeRoutine(
+      id: 'moon_walk',
+      titleEn: 'Moon Walk Evenings',
+      titleAr: 'مساء القمر الهادىء',
+      descriptionEn: 'Evening walks + smoothie cool-down before 9 pm.',
+      descriptionAr: 'نزهة مسائية ومشروب منعش قبل التاسعة.',
+      days: 10,
+      reward: 'Calm streak',
+      completedDays: 6,
+    ),
+  ];
+  final List<CoachMessage> _coachMessages = [
+    CoachMessage(
+      id: 'welcome',
+      text: 'Your neon coach is here — ready when you are.',
+      fromCoach: true,
+      timestamp: DateTime.now(),
+    ),
+  ];
+  final List<String> _coachReplies = [
+    'Add color to dinner with crunchy greens.',
+    'Great streak! Sip water before coffee to stay balanced.',
+    'Slow chewing keeps cravings quiet — try a 5-count bite.',
+    'Celebrate rest as much as hustle. Breathe between tasks.',
+  ];
+  int _coachReplyIndex = 0;
+  Timer? _coachReplyTimer;
+  final List<RecipeIdea> _recipes = [
+    RecipeIdea(
+      id: 'citrus_flash',
+      titleEn: 'Citrus Flash',
+      titleAr: 'وميض الحمضيات',
+      descriptionEn: 'Grapefruit, mint, coconut water sparkle.',
+      descriptionAr: 'جريب فروت ونعناع وماء جوز الهند متلألئ.',
+      image:
+          'https://images.unsplash.com/photo-1464305795204-6f5bbfc7fb81?auto=format&fit=crop&w=800&q=80',
+      calories: 180,
+      sparkle: .7,
+    ),
+    RecipeIdea(
+      id: 'neon_matcha',
+      titleEn: 'Neon Matcha Float',
+      titleAr: 'ماتشا نيون',
+      descriptionEn: 'Matcha, oat milk foam, chia crunch.',
+      descriptionAr: 'ماتشا مع حليب الشوفان ورشة شيا.',
+      image:
+          'https://images.unsplash.com/photo-1481391032119-d89fee407e44?auto=format&fit=crop&w=800&q=80',
+      calories: 210,
+      sparkle: .5,
+    ),
+    RecipeIdea(
+      id: 'sunset_shake',
+      titleEn: 'Sunset Shake',
+      titleAr: 'ميلك شيك الغروب',
+      descriptionEn: 'Mango, carrot, ginger, glowing turmeric.',
+      descriptionAr: 'مانجو وجزر وزنجبيل وكركم لامع.',
+      image:
+          'https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=800&q=80',
+      calories: 195,
+      sparkle: .65,
+    ),
+  ];
 
   List<FoodItem> get visibleItems => List.unmodifiable(_visibleItems);
   Set<String> get comparisonIds => _comparisonIds;
@@ -52,6 +136,9 @@ class DietController extends ChangeNotifier {
   int get moodLevel => _moodLevel;
   List<String> get reflections => List.unmodifiable(_reflections);
   List<String> get mindfulStories => List.unmodifiable(_mindfulStories);
+  List<ChallengeRoutine> get challenges => List.unmodifiable(_challenges);
+  List<CoachMessage> get coachMessages => List.unmodifiable(_coachMessages);
+  List<RecipeIdea> get recipeIdeas => List.unmodifiable(_recipes);
 
   void init() {
     _applyFilters(reset: true);
@@ -167,6 +254,64 @@ class DietController extends ChangeNotifier {
     notifyListeners();
   }
 
+  void toggleChallenge(String id) {
+    final challenge = _challenges.firstWhere((c) => c.id == id);
+    challenge.joined = !challenge.joined;
+    if (!challenge.joined) {
+      challenge.completedDays = 0;
+    }
+    notifyListeners();
+  }
+
+  void incrementChallengeDay(String id) {
+    final challenge = _challenges.firstWhere((c) => c.id == id);
+    if (!challenge.joined) return;
+    if (challenge.completedDays < challenge.days) {
+      challenge.completedDays++;
+      notifyListeners();
+    }
+  }
+
+  void sendCoachMessage(String text) {
+    final trimmed = text.trim();
+    if (trimmed.isEmpty) return;
+    _coachMessages.add(
+      CoachMessage(
+        id: UniqueKey().toString(),
+        text: trimmed,
+        fromCoach: false,
+        timestamp: DateTime.now(),
+      ),
+    );
+    notifyListeners();
+    _coachReplyTimer?.cancel();
+    _coachReplyTimer = Timer(const Duration(milliseconds: 600), () {
+      final reply = _coachReplies[_coachReplyIndex % _coachReplies.length];
+      _coachReplyIndex++;
+      _coachMessages.add(
+        CoachMessage(
+          id: UniqueKey().toString(),
+          text: reply,
+          fromCoach: true,
+          timestamp: DateTime.now(),
+        ),
+      );
+      notifyListeners();
+    });
+  }
+
+  void toggleRecipeFavorite(String id) {
+    final recipe = _recipes.firstWhere((r) => r.id == id);
+    recipe.favorite = !recipe.favorite;
+    notifyListeners();
+  }
+
+  void updateRecipeSparkle(String id, double sparkle) {
+    final recipe = _recipes.firstWhere((r) => r.id == id);
+    recipe.sparkle = sparkle.clamp(0, 1);
+    notifyListeners();
+  }
+
   void _applyFilters({bool reset = false}) {
     if (reset) {
       _page = 0;
@@ -195,5 +340,12 @@ class DietController extends ChangeNotifier {
       ..clear()
       ..addAll(sorted.take(end));
     notifyListeners();
+  }
+
+  @override
+  void dispose() {
+    _debounce?.cancel();
+    _coachReplyTimer?.cancel();
+    super.dispose();
   }
 }

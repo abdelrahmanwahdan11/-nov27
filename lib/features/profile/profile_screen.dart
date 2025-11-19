@@ -5,6 +5,9 @@ import '../../controllers/auth_controller.dart';
 import '../../controllers/diet_controller.dart';
 import '../../core/localization/app_localizations.dart';
 import '../../core/theme/app_theme.dart';
+import '../coach/coach_chat_screen.dart';
+import '../community/community_challenges_screen.dart';
+import '../recipes/recipe_lab_screen.dart';
 import '../wellness/wellness_hub_screen.dart';
 
 class ProfileScreen extends StatelessWidget {
@@ -101,6 +104,47 @@ class ProfileScreen extends StatelessWidget {
                 Navigator.of(context).push(
                   MaterialPageRoute(
                     builder: (_) => WellnessHubScreen(controller: dietController),
+                  ),
+                );
+              },
+            ),
+            ListTile(
+              title: Text(texts.translate('coach_chat')),
+              subtitle: Text(texts.translate('coach_intro')),
+              leading: const Icon(Icons.chat),
+              trailing: const Icon(Icons.chevron_right),
+              onTap: () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (_) => CoachChatScreen(controller: dietController),
+                  ),
+                );
+              },
+            ),
+            ListTile(
+              title: Text(texts.translate('community_challenges')),
+              subtitle: Text(texts.translate('challenges_intro')),
+              leading: const Icon(Icons.flag),
+              trailing: const Icon(Icons.chevron_right),
+              onTap: () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (_) => CommunityChallengesScreen(
+                      controller: dietController,
+                    ),
+                  ),
+                );
+              },
+            ),
+            ListTile(
+              title: Text(texts.translate('recipe_lab')),
+              subtitle: Text(texts.translate('recipe_intro')),
+              leading: const Icon(Icons.blender),
+              trailing: const Icon(Icons.chevron_right),
+              onTap: () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (_) => RecipeLabScreen(controller: dietController),
                   ),
                 );
               },

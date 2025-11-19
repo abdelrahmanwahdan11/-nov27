@@ -3,9 +3,11 @@ import 'package:flutter_animate/flutter_animate.dart';
 
 import '../../controllers/diet_controller.dart';
 import '../../core/localization/app_localizations.dart';
+import '../../core/widgets/primary_button.dart';
 import '../../core/widgets/skeleton.dart';
 import '../../models/weekly_stats.dart';
-import '../../core/widgets/primary_button.dart';
+import '../coach/coach_chat_screen.dart';
+import '../community/community_challenges_screen.dart';
 import 'journey_timeline_screen.dart';
 
 class ProgressScreen extends StatefulWidget {
@@ -119,6 +121,76 @@ class _ProgressScreenState extends State<ProgressScreen> {
                 ],
               ),
             ).animate().fadeIn(duration: 400.ms).slideY(begin: .2),
+            const SizedBox(height: 24),
+            if (!loading)
+              Row(
+                children: [
+                  Expanded(
+                    child: _ProgressShortcut(
+                      icon: Icons.flag,
+                      label: texts.translate('community_cta'),
+                      onTap: () {
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (_) => CommunityChallengesScreen(
+                              controller: widget.controller,
+                            ),
+                          ),
+                        );
+                      },
+                    ),
+                  ),
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: _ProgressShortcut(
+                      icon: Icons.chat_bubble_outline,
+                      label: texts.translate('coach_cta'),
+                      onTap: () {
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (_) => CoachChatScreen(
+                              controller: widget.controller,
+                            ),
+                          ),
+                        );
+                      },
+                    ),
+                  ),
+                ],
+              ).animate().fadeIn(duration: 500.ms).slideY(begin: .1),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _ProgressShortcut extends StatelessWidget {
+  const _ProgressShortcut({
+    required this.icon,
+    required this.label,
+    required this.onTap,
+  });
+
+  final IconData icon;
+  final String label;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        padding: const EdgeInsets.all(16),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(24),
+          color: Theme.of(context).colorScheme.surfaceVariant.withOpacity(.4),
+        ),
+        child: Row(
+          children: [
+            Icon(icon),
+            const SizedBox(width: 12),
+            Expanded(child: Text(label)),
           ],
         ),
       ),
