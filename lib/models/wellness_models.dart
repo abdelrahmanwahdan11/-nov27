@@ -209,6 +209,85 @@ class EnergyPattern {
       locale.languageCode == 'ar' ? descriptionAr : descriptionEn;
 }
 
+class FlowRoutine {
+  FlowRoutine({
+    required this.id,
+    required this.titleEn,
+    required this.titleAr,
+    required this.descriptionEn,
+    required this.descriptionAr,
+    required this.tempo,
+    required this.loops,
+    this.intensity = .5,
+    this.active = false,
+  });
+
+  final String id;
+  final String titleEn;
+  final String titleAr;
+  final String descriptionEn;
+  final String descriptionAr;
+  final int tempo;
+  final int loops;
+  double intensity;
+  bool active;
+
+  String localizedTitle(Locale locale) =>
+      locale.languageCode == 'ar' ? titleAr : titleEn;
+
+  String localizedDescription(Locale locale) =>
+      locale.languageCode == 'ar' ? descriptionAr : descriptionEn;
+}
+
+class FocusDrill {
+  FocusDrill({
+    required this.id,
+    required this.cueEn,
+    required this.cueAr,
+    required this.durationSeconds,
+    required this.breaths,
+    this.progress = 0,
+    this.completed = false,
+  });
+
+  final String id;
+  final String cueEn;
+  final String cueAr;
+  final int durationSeconds;
+  final int breaths;
+  double progress;
+  bool completed;
+
+  String localizedCue(Locale locale) =>
+      locale.languageCode == 'ar' ? cueAr : cueEn;
+}
+
+class JourneyMoment {
+  JourneyMoment({
+    required this.id,
+    required this.titleEn,
+    required this.titleAr,
+    required this.detailEn,
+    required this.detailAr,
+    required this.moodColor,
+    required this.timestamp,
+  });
+
+  final String id;
+  final String titleEn;
+  final String titleAr;
+  final String detailEn;
+  final String detailAr;
+  final Color moodColor;
+  final DateTime timestamp;
+
+  String localizedTitle(Locale locale) =>
+      locale.languageCode == 'ar' ? titleAr : titleEn;
+
+  String localizedDetail(Locale locale) =>
+      locale.languageCode == 'ar' ? detailAr : detailEn;
+}
+
 class SleepCue {
   SleepCue({
     required this.id,

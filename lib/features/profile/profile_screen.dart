@@ -7,9 +7,12 @@ import '../../core/localization/app_localizations.dart';
 import '../../core/theme/app_theme.dart';
 import '../coach/coach_chat_screen.dart';
 import '../community/community_challenges_screen.dart';
+import '../flow/flow_lab_screen.dart';
+import '../focus/focus_gym_screen.dart';
 import '../grocery/grocery_planner_screen.dart';
 import '../habits/habit_studio_screen.dart';
 import '../insights/insights_screen.dart';
+import '../journey/journey_reflections_screen.dart';
 import '../recipes/recipe_lab_screen.dart';
 import '../recovery/recovery_suite_screen.dart';
 import '../recharge/energy_studio_screen.dart';
@@ -159,6 +162,32 @@ class ProfileScreen extends StatelessWidget {
               },
             ),
             ListTile(
+              title: Text(texts.translate('flow_lab')),
+              subtitle: Text(texts.translate('flow_lab_subtitle')),
+              leading: const Icon(Icons.all_inclusive),
+              trailing: const Icon(Icons.chevron_right),
+              onTap: () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (_) => FlowLabScreen(controller: dietController),
+                  ),
+                );
+              },
+            ),
+            ListTile(
+              title: Text(texts.translate('focus_gym')),
+              subtitle: Text(texts.translate('focus_intro')),
+              leading: const Icon(Icons.center_focus_strong),
+              trailing: const Icon(Icons.chevron_right),
+              onTap: () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (_) => FocusGymScreen(controller: dietController),
+                  ),
+                );
+              },
+            ),
+            ListTile(
               title: Text(texts.translate('habit_studio')),
               subtitle: Text(texts.translate('habit_settings_hint')),
               leading: const Icon(Icons.refresh_rounded),
@@ -195,6 +224,21 @@ class ProfileScreen extends StatelessWidget {
                 Navigator.of(context).push(
                   MaterialPageRoute(
                     builder: (_) => CoachChatScreen(controller: dietController),
+                  ),
+                );
+              },
+            ),
+            ListTile(
+              title: Text(texts.translate('journey_reflections')),
+              subtitle: Text(texts.translate('journey_reflections_subtitle')),
+              leading: const Icon(Icons.auto_awesome),
+              trailing: const Icon(Icons.chevron_right),
+              onTap: () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (_) => JourneyReflectionsScreen(
+                      controller: dietController,
+                    ),
                   ),
                 );
               },

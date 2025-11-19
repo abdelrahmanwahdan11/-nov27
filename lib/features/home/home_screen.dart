@@ -10,9 +10,12 @@ import '../../models/food_item.dart';
 import '../catalog/food_detail_screen.dart';
 import '../coach/coach_chat_screen.dart';
 import '../community/community_challenges_screen.dart';
+import '../flow/flow_lab_screen.dart';
+import '../focus/focus_gym_screen.dart';
 import '../grocery/grocery_planner_screen.dart';
 import '../habits/habit_studio_screen.dart';
 import '../insights/insights_screen.dart';
+import '../journey/journey_reflections_screen.dart';
 import '../plan/meal_plan_screen.dart';
 import '../recipes/recipe_lab_screen.dart';
 import '../recovery/recovery_suite_screen.dart';
@@ -202,6 +205,21 @@ class HomeScreen extends StatelessWidget {
                           .fadeIn(duration: 400.ms)
                           .slideY(begin: .1),
                       const SizedBox(height: 20),
+                      _FlowSpotlight(controller: dietController, texts: texts)
+                          .animate()
+                          .fadeIn(duration: 400.ms)
+                          .slideX(begin: .1),
+                      const SizedBox(height: 16),
+                      _FocusSparkCard(controller: dietController, texts: texts)
+                          .animate()
+                          .fadeIn(duration: 400.ms)
+                          .slideY(begin: .1),
+                      const SizedBox(height: 16),
+                      _JourneySparkCard(controller: dietController, texts: texts)
+                          .animate()
+                          .fadeIn(duration: 400.ms)
+                          .slideX(begin: -.1),
+                      const SizedBox(height: 20),
                       Wrap(
                         spacing: 12,
                         runSpacing: 12,
@@ -362,6 +380,45 @@ class HomeScreen extends StatelessWidget {
                               );
                             },
                           ),
+                          _HomeActionTile(
+                            icon: Icons.all_inclusive,
+                            label: texts.translate('flow_cta'),
+                            onTap: () {
+                              Navigator.of(context).push(
+                                MaterialPageRoute(
+                                  builder: (_) => FlowLabScreen(
+                                    controller: dietController,
+                                  ),
+                                ),
+                              );
+                            },
+                          ),
+                          _HomeActionTile(
+                            icon: Icons.center_focus_strong,
+                            label: texts.translate('focus_cta'),
+                            onTap: () {
+                              Navigator.of(context).push(
+                                MaterialPageRoute(
+                                  builder: (_) => FocusGymScreen(
+                                    controller: dietController,
+                                  ),
+                                ),
+                              );
+                            },
+                          ),
+                          _HomeActionTile(
+                            icon: Icons.auto_awesome,
+                            label: texts.translate('journey_reflections_cta'),
+                            onTap: () {
+                              Navigator.of(context).push(
+                                MaterialPageRoute(
+                                  builder: (_) => JourneyReflectionsScreen(
+                                    controller: dietController,
+                                  ),
+                                ),
+                              );
+                            },
+                          ),
                         ],
                       ).animate().fadeIn(delay: 300.ms).slideY(begin: .1),
                       const SizedBox(height: 24),
@@ -491,6 +548,149 @@ class _SleepWindDownCard extends StatelessWidget {
             Text('${(progress * 100).round()}%'),
           ],
         ),
+      ),
+    );
+  }
+}
+
+class _FlowSpotlight extends StatelessWidget {
+  const _FlowSpotlight({required this.controller, required this.texts});
+
+  final DietController controller;
+  final AppLocalizations texts;
+
+  @override
+  Widget build(BuildContext context) {
+    final routine = controller.flowRoutines.first;
+    return GestureDetector(
+      onTap: () {
+        Navigator.of(context).push(
+          MaterialPageRoute(
+            builder: (_) => FlowLabScreen(controller: controller),
+          ),
+        );
+      },
+      child: Container(
+        padding: const EdgeInsets.all(20),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(28),
+          gradient: LinearGradient(
+            colors: [
+              Theme.of(context).colorScheme.primary.withOpacity(.4),
+              Theme.of(context).colorScheme.secondary.withOpacity(.2),
+            ],
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+          ),
+        ),
+        child: Row(
+          children: [
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(texts.translate('flow_preview'),
+                      style: Theme.of(context).textTheme.titleMedium),
+                  const SizedBox(height: 4),
+                  Text(routine.localizedTitle(Localizations.localeOf(context))),
+                  const SizedBox(height: 8),
+                  Text('${texts.translate('flow_loops')}: ${routine.loops} · '
+                      '${texts.translate('flow_tempo')}: ${routine.tempo}'),
+                ],
+              ),
+            ),
+            const Icon(Icons.all_inclusive, size: 42),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _FocusSparkCard extends StatelessWidget {
+  const _FocusSparkCard({required this.controller, required this.texts});
+
+  final DietController controller;
+  final AppLocalizations texts;
+
+  @override
+  Widget build(BuildContext context) {
+    final progress = controller.focusDrills
+            .map((drill) => drill.progress)
+            .fold<double>(0, (sum, value) => sum + value) /
+        controller.focusDrills.length;
+    return Container(
+      padding: const EdgeInsets.all(20),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(24),
+        color: Theme.of(context).colorScheme.surfaceVariant.withOpacity(.5),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(texts.translate('focus_progress'),
+              style: Theme.of(context).textTheme.titleMedium),
+          const SizedBox(height: 8),
+          LinearProgressIndicator(value: progress),
+          const SizedBox(height: 8),
+          PrimaryButton(
+            label: texts.translate('focus_cta'),
+            onPressed: () {
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (_) => FocusGymScreen(controller: controller),
+                ),
+              );
+            },
+          )
+        ],
+      ),
+    );
+  }
+}
+
+class _JourneySparkCard extends StatelessWidget {
+  const _JourneySparkCard({required this.controller, required this.texts});
+
+  final DietController controller;
+  final AppLocalizations texts;
+
+  @override
+  Widget build(BuildContext context) {
+    final latest = controller.journeyMoments.first;
+    final locale = Localizations.localeOf(context);
+    return Container(
+      padding: const EdgeInsets.all(20),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(24),
+        gradient: LinearGradient(
+          colors: [latest.moodColor.withOpacity(.8), latest.moodColor.withOpacity(.3)],
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+        ),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(texts.translate('journey_preview'),
+              style: Theme.of(context).textTheme.titleMedium),
+          const SizedBox(height: 8),
+          Text(latest.localizedTitle(locale),
+              style: Theme.of(context).textTheme.bodyLarge),
+          const SizedBox(height: 4),
+          Text(latest.localizedDetail(locale)),
+          const SizedBox(height: 12),
+          PrimaryButton(
+            label: texts.translate('journey_reflections_cta'),
+            onPressed: () {
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (_) => JourneyReflectionsScreen(controller: controller),
+                ),
+              );
+            },
+          ),
+        ],
       ),
     );
   }

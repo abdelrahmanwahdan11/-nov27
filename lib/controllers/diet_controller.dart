@@ -39,6 +39,94 @@ class DietController extends ChangeNotifier {
     'Pick one color for today\'s plate and celebrate it in every dish.',
     'Slow down the first sip, notice texture, temperature, scent.',
   ];
+  final List<FlowRoutine> _flowRoutines = [
+    FlowRoutine(
+      id: 'neon_wave',
+      titleEn: 'Neon wave',
+      titleAr: 'موجة نيون',
+      descriptionEn: 'Alternating lunges, breath holds, and hydration cues.',
+      descriptionAr: 'اندفاعات متناوبة مع حبس النفس وتلميحات الترطيب.',
+      tempo: 126,
+      loops: 3,
+      intensity: .65,
+      active: true,
+    ),
+    FlowRoutine(
+      id: 'glow_core',
+      titleEn: 'Glow core',
+      titleAr: 'نواة التوهج',
+      descriptionEn: 'Core pulses synced with straw sips and box breathing.',
+      descriptionAr: 'نبضات للعضلات الأساسية متزامنة مع رشفات قصيرة وتنفس مربع.',
+      tempo: 110,
+      loops: 4,
+      intensity: .5,
+    ),
+    FlowRoutine(
+      id: 'skyline_dash',
+      titleEn: 'Skyline dash',
+      titleAr: 'اندفاع الأفق',
+      descriptionEn: 'Low-impact jumps paired with mindful glances outdoors.',
+      descriptionAr: 'قفزات خفيفة مع نظرات واعية نحو الأفق.',
+      tempo: 140,
+      loops: 5,
+      intensity: .55,
+    ),
+  ];
+  final List<FocusDrill> _focusDrills = [
+    FocusDrill(
+      id: 'blink_reset',
+      cueEn: 'Blink reset',
+      cueAr: 'إعادة ضبط الوميض',
+      durationSeconds: 60,
+      breaths: 6,
+      progress: .3,
+    ),
+    FocusDrill(
+      id: 'color_track',
+      cueEn: 'Color tracking',
+      cueAr: 'تتبع اللون',
+      durationSeconds: 90,
+      breaths: 8,
+      progress: .5,
+    ),
+    FocusDrill(
+      id: 'stillness_bell',
+      cueEn: 'Stillness bell',
+      cueAr: 'جرس السكون',
+      durationSeconds: 120,
+      breaths: 10,
+      progress: .2,
+    ),
+  ];
+  final List<JourneyMoment> _journeyMoments = [
+    JourneyMoment(
+      id: 'morning_glow',
+      titleEn: 'Morning glow',
+      titleAr: 'توهج الصباح',
+      detailEn: 'Logged smoothies before sunrise and felt light.',
+      detailAr: 'سجلت العصائر قبل الشروق وشعرت بالخفة.',
+      moodColor: Colors.amber,
+      timestamp: DateTime.now().subtract(const Duration(hours: 6)),
+    ),
+    JourneyMoment(
+      id: 'city_walk',
+      titleEn: 'City walk',
+      titleAr: 'نزهة المدينة',
+      detailEn: 'Tracked slow breathing with the skyline lights.',
+      detailAr: 'تابعت تنفساً بطيئاً مع أضواء المدينة.',
+      moodColor: Colors.tealAccent,
+      timestamp: DateTime.now().subtract(const Duration(hours: 18)),
+    ),
+    JourneyMoment(
+      id: 'midnight_reset',
+      titleEn: 'Midnight reset',
+      titleAr: 'إعادة منتصف الليل',
+      detailEn: 'Skipped scrolling, journaled three gratitude sparks.',
+      detailAr: 'تركت التصفح وكتبت ثلاث ومضات امتنان.',
+      moodColor: Colors.deepPurpleAccent,
+      timestamp: DateTime.now().subtract(const Duration(days: 1)),
+    ),
+  ];
   final List<ChallengeRoutine> _challenges = [
     ChallengeRoutine(
       id: 'rise_glow',
@@ -575,6 +663,77 @@ class DietController extends ChangeNotifier {
 
   void clearComparison() {
     _comparisonIds.clear();
+    notifyListeners();
+  }
+
+  List<FlowRoutine> get flowRoutines => List.unmodifiable(_flowRoutines);
+
+  void toggleFlowRoutine(String id) {
+    final routine = _flowRoutines.firstWhere((element) => element.id == id);
+    routine.active = !routine.active;
+    notifyListeners();
+  }
+
+  void updateFlowRoutineIntensity(String id, double value) {
+    final routine = _flowRoutines.firstWhere((element) => element.id == id);
+    routine.intensity = value;
+    notifyListeners();
+  }
+
+  void shuffleFlowRoutines() {
+    for (final routine in _flowRoutines) {
+      routine.intensity = Random().nextDouble().clamp(.2, .95);
+      routine.active = Random().nextBool();
+    }
+    notifyListeners();
+  }
+
+  List<FocusDrill> get focusDrills => List.unmodifiable(_focusDrills);
+
+  void nudgeFocusDrill(String id, [double delta = .1]) {
+    final drill = _focusDrills.firstWhere((element) => element.id == id);
+    drill.progress = (drill.progress + delta).clamp(0, 1);
+    notifyListeners();
+  }
+
+  void completeFocusDrill(String id) {
+    final drill = _focusDrills.firstWhere((element) => element.id == id);
+    drill.completed = true;
+    drill.progress = 1;
+    _moodLevel = (_moodLevel + 1).clamp(1, 5);
+    notifyListeners();
+  }
+
+  void resetFocusDrills() {
+    for (final drill in _focusDrills) {
+      drill.completed = false;
+      drill.progress = 0;
+    }
+    notifyListeners();
+  }
+
+  List<JourneyMoment> get journeyMoments => List.unmodifiable(_journeyMoments);
+
+  void addJourneyMoment({
+    required String titleEn,
+    required String titleAr,
+    required String detailEn,
+    required String detailAr,
+    Color? moodColor,
+  }) {
+    final now = DateTime.now();
+    _journeyMoments.insert(
+      0,
+      JourneyMoment(
+        id: now.millisecondsSinceEpoch.toString(),
+        titleEn: titleEn,
+        titleAr: titleAr,
+        detailEn: detailEn,
+        detailAr: detailAr,
+        moodColor: moodColor ?? Colors.amberAccent,
+        timestamp: now,
+      ),
+    );
     notifyListeners();
   }
 

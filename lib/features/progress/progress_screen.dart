@@ -8,7 +8,10 @@ import '../../core/widgets/skeleton.dart';
 import '../../models/weekly_stats.dart';
 import '../coach/coach_chat_screen.dart';
 import '../community/community_challenges_screen.dart';
+import '../flow/flow_lab_screen.dart';
+import '../focus/focus_gym_screen.dart';
 import '../insights/insights_screen.dart';
+import '../journey/journey_reflections_screen.dart';
 import '../recovery/recovery_suite_screen.dart';
 import '../recharge/energy_studio_screen.dart';
 import '../recharge/momentum_journal_screen.dart';
@@ -139,6 +142,34 @@ class _ProgressScreenState extends State<ProgressScreen> {
                   );
                 },
               ).animate().fadeIn(duration: 400.ms).slideY(begin: .1),
+            if (!loading) const SizedBox(height: 12),
+            if (!loading)
+              PrimaryButton(
+                label: texts.translate('flow_cta'),
+                onPressed: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (_) => FlowLabScreen(
+                        controller: widget.controller,
+                      ),
+                    ),
+                  );
+                },
+              ).animate().fadeIn(duration: 400.ms).slideY(begin: .1),
+            if (!loading) const SizedBox(height: 12),
+            if (!loading)
+              PrimaryButton(
+                label: texts.translate('focus_cta'),
+                onPressed: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (_) => FocusGymScreen(
+                        controller: widget.controller,
+                      ),
+                    ),
+                  );
+                },
+              ).animate().fadeIn(duration: 400.ms).slideY(begin: .1),
             const SizedBox(height: 24),
             Container(
               padding: const EdgeInsets.all(20),
@@ -165,6 +196,20 @@ class _ProgressScreenState extends State<ProgressScreen> {
                         ),
                       );
                     },
+                  ),
+                  const SizedBox(height: 8),
+                  TextButton(
+                    onPressed: () {
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (_) => JourneyReflectionsScreen(
+                            controller: widget.controller,
+                          ),
+                        ),
+                      );
+                    },
+                    child:
+                        Text(texts.translate('journey_reflections_cta')),
                   )
                 ],
               ),
