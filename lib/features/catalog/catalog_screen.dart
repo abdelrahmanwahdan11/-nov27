@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package/flutter_animate/flutter_animate.dart';
 
 import '../../controllers/diet_controller.dart';
 import '../../core/localization/app_localizations.dart';
@@ -120,11 +121,18 @@ class _CatalogScreenState extends State<CatalogScreen> {
                     ),
                   )
                 else
-                  ...items.map((item) => _CatalogCard(
-                        item: item,
-                        selected: widget.controller.comparisonIds.contains(item.id),
-                        onCompare: () => widget.controller.toggleComparison(item, context),
-                      )),
+                  ...List.generate(items.length, (index) {
+                    final item = items[index];
+                    return _CatalogCard(
+                      item: item,
+                      selected: widget.controller.comparisonIds.contains(item.id),
+                      onCompare: () =>
+                          widget.controller.toggleComparison(item, context),
+                    )
+                        .animate(delay: (index * 80).ms)
+                        .fadeIn(duration: 250.ms)
+                        .slideY(begin: .1);
+                  }),
                 if (widget.controller.loading)
                   const Padding(
                     padding: EdgeInsets.symmetric(vertical: 16),

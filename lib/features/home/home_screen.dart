@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 
 import '../../controllers/diet_controller.dart';
 import '../../core/localization/app_localizations.dart';
@@ -7,6 +8,7 @@ import '../../core/widgets/section_title.dart';
 import '../../data/mock_food_items.dart';
 import '../../models/food_item.dart';
 import '../catalog/food_detail_screen.dart';
+import '../plan/meal_plan_screen.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key, required this.dietController});
@@ -43,7 +45,10 @@ class HomeScreen extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      _WeekChart(week.caloriesPerDay),
+                      _WeekChart(week.caloriesPerDay)
+                          .animate(key: ValueKey(dietController.currentWeek.weekStart))
+                          .fadeIn(duration: 500.ms)
+                          .slideY(begin: .2),
                       const SizedBox(height: 16),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -52,9 +57,13 @@ class HomeScreen extends StatelessWidget {
                             onPressed: () => dietController.changeWeek(-1),
                             icon: const Icon(Icons.chevron_left),
                           ),
-                          Text(
-                            '${texts.translate('week')} ${dietController.currentWeek.weekStart.month}/${dietController.currentWeek.weekStart.day}',
-                            style: Theme.of(context).textTheme.titleLarge,
+                          AnimatedSwitcher(
+                            duration: const Duration(milliseconds: 350),
+                            child: Text(
+                              '${texts.translate('week')} ${dietController.currentWeek.weekStart.month}/${dietController.currentWeek.weekStart.day}',
+                              key: ValueKey(dietController.currentWeek.weekStart),
+                              style: Theme.of(context).textTheme.titleLarge,
+                            ),
                           ),
                           IconButton(
                             onPressed: () => dietController.changeWeek(1),
@@ -64,18 +73,55 @@ class HomeScreen extends StatelessWidget {
                       ),
                       const SizedBox(height: 12),
                       Center(
-                        child: Text(
-                          '${week.totalCalories} kcal',
-                          style: Theme.of(context).textTheme.displayMedium,
+                        child: AnimatedSwitcher(
+                          duration: const Duration(milliseconds: 400),
+                          child: Text(
+                            '${week.totalCalories} kcal',
+                            key: ValueKey(week.totalCalories),
+                            style: Theme.of(context)
+                                .textTheme
+                                .displayMedium
+                                ?.copyWith(letterSpacing: -2),
+                          ),
                         ),
                       ),
                       const SizedBox(height: 12),
-                      Center(
-                        child: PrimaryButton(
-                          label: texts.translate('add_to_diet'),
-                          onPressed: () {},
+                      Container(
+                        padding: const EdgeInsets.all(20),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(28),
+                          gradient: LinearGradient(
+                            colors: [
+                              Theme.of(context).colorScheme.primary.withOpacity(.35),
+                              Theme.of(context).colorScheme.secondary.withOpacity(.15),
+                            ],
+                            begin: Alignment.topLeft,
+                            end: Alignment.bottomRight,
+                          ),
                         ),
-                      ),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(texts.translate('today_focus'),
+                                style: Theme.of(context).textTheme.titleMedium),
+                            const SizedBox(height: 8),
+                            Text(texts.translate('breathing_prompt')),
+                            const SizedBox(height: 12),
+                            PrimaryButton(
+                              label: texts.translate('start_plan'),
+                              onPressed: () {
+                                Navigator.of(context).push(
+                                  MaterialPageRoute(
+                                    builder: (_) => MealPlanScreen(
+                                      controller: dietController,
+                                    ),
+                                  ),
+                                );
+                              },
+                            ),
+                          ],
+                        ),
+                      ).animate().fadeIn(duration: 500.ms).slideY(begin: .2),
                       const SizedBox(height: 24),
                       SectionTitle(title: texts.translate('catalog')),
                       SizedBox(
@@ -86,7 +132,10 @@ class HomeScreen extends StatelessWidget {
                           separatorBuilder: (_, __) => const SizedBox(width: 16),
                           itemBuilder: (context, index) {
                             final item = mockFoodItems[index];
-                            return _FoodCard(item: item);
+                            return _FoodCard(item: item)
+                                .animate(delay: (index * 120).ms)
+                                .fadeIn()
+                                .slideX(begin: .3);
                           },
                         ),
                       )
