@@ -128,6 +128,91 @@ class DietController extends ChangeNotifier {
       timestamp: DateTime.now().subtract(const Duration(days: 1)),
     ),
   ];
+  final List<SerenityModule> _serenityModules = [
+    SerenityModule(
+      id: 'lunar_drift',
+      titleEn: 'Lunar drift',
+      titleAr: 'انجراف قمري',
+      mantraEn: 'Lengthen exhale, float with the glow.',
+      mantraAr: 'أطل الزفير وتمايل مع التوهج.',
+      depth: .45,
+      breaths: 8,
+      cues: const ['4s inhale', '2s hold', '6s exhale'],
+    ),
+    SerenityModule(
+      id: 'glow_anchor',
+      titleEn: 'Glow anchor',
+      titleAr: 'مرساة التوهج',
+      mantraEn: 'Sip slow, root the shoulders, melt the jaw.',
+      mantraAr: 'ارتشف ببطء، ثبّت الكتفين، وأذب الفك.',
+      depth: .6,
+      breaths: 10,
+      cues: const ['Sip', 'Roll shoulders', 'Smile'],
+    ),
+    SerenityModule(
+      id: 'horizon_wave',
+      titleEn: 'Horizon wave',
+      titleAr: 'موجة الأفق',
+      mantraEn: 'Trace skyline lights with a soft gaze.',
+      mantraAr: 'اتبع أضواء الأفق بنظرة هادئة.',
+      depth: .7,
+      breaths: 12,
+      cues: const ['Reach', 'Breathe', 'Release'],
+    ),
+  ];
+  int _activeSerenityIndex = 0;
+  final List<MomentumPulse> _momentumPulses = [
+    MomentumPulse(
+      id: 'sip_reset',
+      titleEn: 'Sip reset',
+      titleAr: 'إعادة رشفة',
+      descriptionEn: 'Mini hydration burst after meetings.',
+      descriptionAr: 'اندفاع ترطيب صغير بعد الاجتماعات.',
+      goal: .9,
+      progress: .4,
+    ),
+    MomentumPulse(
+      id: 'stairs_glow',
+      titleEn: 'Stairs glow',
+      titleAr: 'توهج الدرج',
+      descriptionEn: 'Climb two flights with breath counts.',
+      descriptionAr: 'اصعد طابقين مع عدّ الأنفاس.',
+      goal: .8,
+      progress: .3,
+    ),
+    MomentumPulse(
+      id: 'gratitude_ping',
+      titleEn: 'Gratitude ping',
+      titleAr: 'إشارة الامتنان',
+      descriptionEn: 'Send a thank-you note before dinner.',
+      descriptionAr: 'أرسل رسالة شكر قبل العشاء.',
+      goal: 1,
+      progress: .5,
+    ),
+  ];
+  final List<GratitudeMoment> _gratitudeMoments = [
+    GratitudeMoment(
+      id: 'spark_morning',
+      messageEn: 'Sunrise walk felt like a soft neon curtain.',
+      messageAr: 'نزهة الشروق بدت كستارة نيون ناعمة.',
+      createdAt: DateTime.now().subtract(const Duration(hours: 3)),
+      moodColor: Colors.amberAccent,
+    ),
+    GratitudeMoment(
+      id: 'spark_midday',
+      messageEn: 'Shared smoothie recipes with the team.',
+      messageAr: 'شاركت وصفات العصير مع الفريق.',
+      createdAt: DateTime.now().subtract(const Duration(hours: 8)),
+      moodColor: Colors.tealAccent,
+    ),
+    GratitudeMoment(
+      id: 'spark_evening',
+      messageEn: 'Called mom while brewing mint tea.',
+      messageAr: 'اتصلت بوالدتي أثناء إعداد شاي النعناع.',
+      createdAt: DateTime.now().subtract(const Duration(hours: 15)),
+      moodColor: Colors.pinkAccent,
+    ),
+  ];
   final List<ChallengeRoutine> _challenges = [
     ChallengeRoutine(
       id: 'rise_glow',
@@ -891,6 +976,14 @@ class DietController extends ChangeNotifier {
   List<RitualBlueprint> get ritualBlueprints => List.unmodifiable(_rituals);
   List<RewardBadge> get rewardBadges => List.unmodifiable(_rewards);
   List<String> get insightHighlights => List.unmodifiable(_insightHighlights);
+  List<SerenityModule> get serenityModules => List.unmodifiable(_serenityModules);
+  SerenityModule get activeSerenityModule =>
+      _serenityModules[_activeSerenityIndex];
+  int get activeSerenityIndex => _activeSerenityIndex;
+  List<MomentumPulse> get momentumPulses =>
+      List.unmodifiable(_momentumPulses);
+  List<GratitudeMoment> get gratitudeMoments =>
+      List.unmodifiable(_gratitudeMoments);
 
   void init() {
     _applyFilters(reset: true);
@@ -1555,6 +1648,78 @@ class DietController extends ChangeNotifier {
 
   void cycleVisionColor(String id) {
     final entry = _visionEntries.firstWhere((element) => element.id == id);
+    final currentIndex = _visionPalette.indexOf(entry.moodColor);
+    final nextIndex = (currentIndex + 1) % _visionPalette.length;
+    entry.moodColor = _visionPalette[nextIndex];
+    notifyListeners();
+  }
+
+  void setActiveSerenityIndex(int index) {
+    if (_serenityModules.isEmpty) return;
+    _activeSerenityIndex = index % _serenityModules.length;
+    if (_activeSerenityIndex < 0) {
+      _activeSerenityIndex = _serenityModules.length - 1;
+    }
+    notifyListeners();
+  }
+
+  void cycleSerenityModule() {
+    setActiveSerenityIndex(_activeSerenityIndex + 1);
+  }
+
+  void updateSerenityDepth(String id, double value) {
+    final module = _serenityModules.firstWhere((element) => element.id == id);
+    module.depth = value.clamp(0, 1);
+    notifyListeners();
+  }
+
+  void adjustSerenityBreaths(String id, int delta) {
+    final module = _serenityModules.firstWhere((element) => element.id == id);
+    module.breaths = max(4, module.breaths + delta);
+    notifyListeners();
+  }
+
+  void toggleMomentumPulse(String id) {
+    final pulse = _momentumPulses.firstWhere((element) => element.id == id);
+    pulse.completed = !pulse.completed;
+    pulse.progress = pulse.completed ? pulse.goal : pulse.progress * .7;
+    notifyListeners();
+  }
+
+  void setMomentumPulseProgress(String id, double progress) {
+    final pulse = _momentumPulses.firstWhere((element) => element.id == id);
+    pulse.progress = progress.clamp(0, 1);
+    if (pulse.progress >= pulse.goal) {
+      pulse.completed = true;
+      pulse.progress = pulse.goal;
+    } else {
+      pulse.completed = false;
+    }
+    notifyListeners();
+  }
+
+  void addGratitudeMoment(String message, Locale locale) {
+    final trimmed = message.trim();
+    if (trimmed.isEmpty) return;
+    final color = _visionPalette[_random.nextInt(_visionPalette.length)];
+    _gratitudeMoments.insert(
+      0,
+      GratitudeMoment(
+        id: 'gratitude_${DateTime.now().millisecondsSinceEpoch}',
+        messageEn: locale.languageCode == 'ar' ? trimmed : trimmed,
+        messageAr: locale.languageCode == 'ar' ? trimmed : trimmed,
+        createdAt: DateTime.now(),
+        moodColor: color,
+      ),
+    );
+    if (_gratitudeMoments.length > 24) {
+      _gratitudeMoments.removeLast();
+    }
+    notifyListeners();
+  }
+
+  void cycleGratitudeColor(String id) {
+    final entry = _gratitudeMoments.firstWhere((element) => element.id == id);
     final currentIndex = _visionPalette.indexOf(entry.moodColor);
     final nextIndex = (currentIndex + 1) % _visionPalette.length;
     entry.moodColor = _visionPalette[nextIndex];

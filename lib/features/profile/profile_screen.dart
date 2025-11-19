@@ -18,6 +18,7 @@ import '../habits/habit_studio_screen.dart';
 import '../insights/insights_screen.dart';
 import '../journey/journey_reflections_screen.dart';
 import '../journey/legacy_capsule_screen.dart';
+import '../gratitude/gratitude_garden_screen.dart';
 import '../recipes/recipe_lab_screen.dart';
 import '../recovery/recovery_suite_screen.dart';
 import '../recharge/energy_studio_screen.dart';
@@ -30,6 +31,8 @@ import '../rhythm/rhythm_board_screen.dart';
 import '../vision/vision_board_screen.dart';
 import '../wellness/wellness_hub_screen.dart';
 import '../plan/macro_forge_screen.dart';
+import '../serenity/serenity_circuit_screen.dart';
+import '../pulse/momentum_pulse_screen.dart';
 
 class ProfileScreen extends StatelessWidget {
   const ProfileScreen({
@@ -166,6 +169,49 @@ class ProfileScreen extends StatelessWidget {
                 Navigator.of(context).push(
                   MaterialPageRoute(
                     builder: (_) => SleepSanctuaryScreen(controller: dietController),
+                  ),
+                );
+              },
+            ),
+            ListTile(
+              title: Text(texts.translate('serenity_circuit')),
+              subtitle: Text(texts.translate('serenity_hint')),
+              leading: const Icon(Icons.blur_on),
+              trailing: const Icon(Icons.chevron_right),
+              onTap: () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (_) => SerenityCircuitScreen(
+                      controller: dietController,
+                    ),
+                  ),
+                );
+              },
+            ),
+            ListTile(
+              title: Text(texts.translate('momentum_pulse')),
+              subtitle: Text(texts.translate('momentum_hint')),
+              leading: const Icon(Icons.bolt),
+              trailing: const Icon(Icons.chevron_right),
+              onTap: () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (_) => MomentumPulseScreen(controller: dietController),
+                  ),
+                );
+              },
+            ),
+            ListTile(
+              title: Text(texts.translate('gratitude_garden')),
+              subtitle: Text(texts.translate('gratitude_hint')),
+              leading: const Icon(Icons.spa),
+              trailing: const Icon(Icons.chevron_right),
+              onTap: () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (_) => GratitudeGardenScreen(
+                      controller: dietController,
+                    ),
                   ),
                 );
               },

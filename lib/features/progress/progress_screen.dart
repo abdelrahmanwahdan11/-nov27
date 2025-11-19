@@ -17,6 +17,7 @@ import '../growth/growth_arena_screen.dart';
 import '../insights/insights_screen.dart';
 import '../journey/journey_reflections_screen.dart';
 import '../journey/legacy_capsule_screen.dart';
+import '../gratitude/gratitude_garden_screen.dart';
 import '../plan/macro_forge_screen.dart';
 import '../recovery/recovery_suite_screen.dart';
 import '../recharge/energy_studio_screen.dart';
@@ -27,6 +28,8 @@ import '../rewards/rewards_vault_screen.dart';
 import '../rhythm/rhythm_board_screen.dart';
 import '../vision/vision_board_screen.dart';
 import 'journey_timeline_screen.dart';
+import '../serenity/serenity_circuit_screen.dart';
+import '../pulse/momentum_pulse_screen.dart';
 
 class ProgressScreen extends StatefulWidget {
   const ProgressScreen({super.key, required this.controller});
@@ -445,6 +448,57 @@ class _ProgressScreenState extends State<ProgressScreen> {
                   Navigator.of(context).push(
                     MaterialPageRoute(
                       builder: (_) => SyncArenaScreen(
+                        controller: widget.controller,
+                      ),
+                    ),
+                  );
+                },
+              ).animate().fadeIn(duration: 400.ms).slideY(begin: .1),
+            if (!loading) const SizedBox(height: 12),
+            if (!loading)
+              _FinaleShortcutCard(
+                icon: Icons.blur_on,
+                title: texts.translate('serenity_circuit'),
+                subtitle: texts.translate('serenity_hint'),
+                colors: const [Colors.deepPurpleAccent, Colors.blueAccent],
+                onTap: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (_) => SerenityCircuitScreen(
+                        controller: widget.controller,
+                      ),
+                    ),
+                  );
+                },
+              ).animate().fadeIn(duration: 400.ms).slideY(begin: .1),
+            if (!loading) const SizedBox(height: 12),
+            if (!loading)
+              _FinaleShortcutCard(
+                icon: Icons.bolt,
+                title: texts.translate('momentum_pulse'),
+                subtitle: texts.translate('momentum_hint'),
+                colors: const [Colors.orangeAccent, Colors.pinkAccent],
+                onTap: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (_) => MomentumPulseScreen(
+                        controller: widget.controller,
+                      ),
+                    ),
+                  );
+                },
+              ).animate().fadeIn(duration: 400.ms).slideY(begin: .1),
+            if (!loading) const SizedBox(height: 12),
+            if (!loading)
+              _FinaleShortcutCard(
+                icon: Icons.spa,
+                title: texts.translate('gratitude_garden'),
+                subtitle: texts.translate('gratitude_hint'),
+                colors: const [Colors.greenAccent, Colors.blueGrey],
+                onTap: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (_) => GratitudeGardenScreen(
                         controller: widget.controller,
                       ),
                     ),

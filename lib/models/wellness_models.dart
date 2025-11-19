@@ -181,6 +181,81 @@ class RewardBadge {
       locale.languageCode == 'ar' ? descriptionAr : descriptionEn;
 }
 
+class SerenityModule {
+  SerenityModule({
+    required this.id,
+    required this.titleEn,
+    required this.titleAr,
+    required this.mantraEn,
+    required this.mantraAr,
+    required this.depth,
+    required this.breaths,
+    required this.cues,
+  });
+
+  final String id;
+  final String titleEn;
+  final String titleAr;
+  final String mantraEn;
+  final String mantraAr;
+  double depth;
+  int breaths;
+  final List<String> cues;
+
+  String localizedTitle(Locale locale) =>
+      locale.languageCode == 'ar' ? titleAr : titleEn;
+
+  String localizedMantra(Locale locale) =>
+      locale.languageCode == 'ar' ? mantraAr : mantraEn;
+}
+
+class MomentumPulse {
+  MomentumPulse({
+    required this.id,
+    required this.titleEn,
+    required this.titleAr,
+    required this.descriptionEn,
+    required this.descriptionAr,
+    required this.goal,
+    this.progress = .2,
+    this.completed = false,
+  });
+
+  final String id;
+  final String titleEn;
+  final String titleAr;
+  final String descriptionEn;
+  final String descriptionAr;
+  final double goal;
+  double progress;
+  bool completed;
+
+  String localizedTitle(Locale locale) =>
+      locale.languageCode == 'ar' ? titleAr : titleEn;
+
+  String localizedDescription(Locale locale) =>
+      locale.languageCode == 'ar' ? descriptionAr : descriptionEn;
+}
+
+class GratitudeMoment {
+  GratitudeMoment({
+    required this.id,
+    required this.messageEn,
+    required this.messageAr,
+    required this.createdAt,
+    required this.moodColor,
+  });
+
+  final String id;
+  String messageEn;
+  String messageAr;
+  final DateTime createdAt;
+  Color moodColor;
+
+  String localizedMessage(Locale locale) =>
+      locale.languageCode == 'ar' ? messageAr : messageEn;
+}
+
 class EnergyPattern {
   EnergyPattern({
     required this.id,

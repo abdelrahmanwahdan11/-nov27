@@ -22,8 +22,10 @@ import '../habits/habit_studio_screen.dart';
 import '../insights/insights_screen.dart';
 import '../journey/journey_reflections_screen.dart';
 import '../journey/legacy_capsule_screen.dart';
+import '../gratitude/gratitude_garden_screen.dart';
 import '../plan/macro_forge_screen.dart';
 import '../plan/meal_plan_screen.dart';
+import '../pulse/momentum_pulse_screen.dart';
 import '../recipes/recipe_lab_screen.dart';
 import '../recovery/recovery_suite_screen.dart';
 import '../recharge/energy_studio_screen.dart';
@@ -34,6 +36,7 @@ import '../rewards/rewards_vault_screen.dart';
 import '../rituals/ritual_builder_screen.dart';
 import '../rhythm/rhythm_board_screen.dart';
 import '../vision/vision_board_screen.dart';
+import '../serenity/serenity_circuit_screen.dart';
 import '../wellness/wellness_hub_screen.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -612,6 +615,69 @@ class HomeScreen extends StatelessWidget {
                         ],
                       ).animate().fadeIn(duration: 400.ms).slideY(begin: .1),
                       const SizedBox(height: 24),
+                      SectionTitle(title: texts.translate('finale_glow_pods')),
+                      const SizedBox(height: 8),
+                      Row(
+                        children: [
+                          Expanded(
+                            child: _FinaleGlowCard(
+                              icon: Icons.blur_on,
+                              title: texts.translate('serenity_circuit'),
+                              subtitle: texts.translate('serenity_hint'),
+                              actionLabel: texts.translate('serenity_cta'),
+                              colors: const [Colors.deepPurpleAccent, Colors.indigo],
+                              onTap: () {
+                                Navigator.of(context).push(
+                                  MaterialPageRoute(
+                                    builder: (_) => SerenityCircuitScreen(
+                                      controller: dietController,
+                                    ),
+                                  ),
+                                );
+                              },
+                            ),
+                          ),
+                          const SizedBox(width: 12),
+                          Expanded(
+                            child: _FinaleGlowCard(
+                              icon: Icons.bolt,
+                              title: texts.translate('momentum_pulse'),
+                              subtitle: texts.translate('momentum_hint'),
+                              actionLabel: texts.translate('pulse_cta'),
+                              colors: const [Colors.orangeAccent, Colors.pinkAccent],
+                              onTap: () {
+                                Navigator.of(context).push(
+                                  MaterialPageRoute(
+                                    builder: (_) => MomentumPulseScreen(
+                                      controller: dietController,
+                                    ),
+                                  ),
+                                );
+                              },
+                            ),
+                          ),
+                          const SizedBox(width: 12),
+                          Expanded(
+                            child: _FinaleGlowCard(
+                              icon: Icons.spa,
+                              title: texts.translate('gratitude_garden'),
+                              subtitle: texts.translate('gratitude_hint'),
+                              actionLabel: texts.translate('gratitude_cta'),
+                              colors: const [Colors.greenAccent, Colors.blueGrey],
+                              onTap: () {
+                                Navigator.of(context).push(
+                                  MaterialPageRoute(
+                                    builder: (_) => GratitudeGardenScreen(
+                                      controller: dietController,
+                                    ),
+                                  ),
+                                );
+                              },
+                            ),
+                          ),
+                        ],
+                      ).animate().fadeIn(duration: 400.ms).slideY(begin: .1),
+                      const SizedBox(height: 24),
                       SectionTitle(title: texts.translate('catalog')),
                       SizedBox(
                         height: 220,
@@ -1065,6 +1131,78 @@ class _FinaleCard extends StatelessWidget {
               subtitle,
               style: Theme.of(context).textTheme.bodySmall,
             ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _FinaleGlowCard extends StatelessWidget {
+  const _FinaleGlowCard({
+    required this.icon,
+    required this.title,
+    required this.subtitle,
+    required this.actionLabel,
+    required this.colors,
+    required this.onTap,
+  });
+
+  final IconData icon;
+  final String title;
+  final String subtitle;
+  final String actionLabel;
+  final List<Color> colors;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        height: 190,
+        padding: const EdgeInsets.all(20),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(30),
+          gradient: LinearGradient(
+            colors: colors,
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+          ),
+          boxShadow: [
+            BoxShadow(
+              color: colors.first.withOpacity(.25),
+              blurRadius: 24,
+              offset: const Offset(0, 12),
+            ),
+          ],
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Icon(icon, color: Colors.black87),
+            const SizedBox(height: 8),
+            Text(
+              title,
+              style: Theme.of(context)
+                  .textTheme
+                  .titleMedium
+                  ?.copyWith(fontWeight: FontWeight.bold),
+            ),
+            const SizedBox(height: 4),
+            Text(
+              subtitle,
+              maxLines: 2,
+            ),
+            const Spacer(),
+            TextButton(
+              onPressed: onTap,
+              style: TextButton.styleFrom(
+                foregroundColor: Colors.black87,
+                padding: EdgeInsets.zero,
+              ),
+              child: Text(actionLabel),
+            )
           ],
         ),
       ),
