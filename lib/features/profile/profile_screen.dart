@@ -14,16 +14,19 @@ import '../grocery/grocery_planner_screen.dart';
 import '../habits/habit_studio_screen.dart';
 import '../insights/insights_screen.dart';
 import '../journey/journey_reflections_screen.dart';
+import '../journey/legacy_capsule_screen.dart';
 import '../recipes/recipe_lab_screen.dart';
 import '../recovery/recovery_suite_screen.dart';
 import '../recharge/energy_studio_screen.dart';
 import '../recharge/momentum_journal_screen.dart';
 import '../recharge/sleep_sanctuary_screen.dart';
+import '../recharge/pulse_observatory_screen.dart';
 import '../rewards/rewards_vault_screen.dart';
 import '../rituals/ritual_builder_screen.dart';
 import '../rhythm/rhythm_board_screen.dart';
 import '../vision/vision_board_screen.dart';
 import '../wellness/wellness_hub_screen.dart';
+import '../plan/macro_forge_screen.dart';
 
 class ProfileScreen extends StatelessWidget {
   const ProfileScreen({
@@ -199,6 +202,49 @@ class ProfileScreen extends StatelessWidget {
                 Navigator.of(context).push(
                   MaterialPageRoute(
                     builder: (_) => VisionBoardScreen(controller: dietController),
+                  ),
+                );
+              },
+            ),
+            ListTile(
+              title: Text(texts.translate('pulse_observatory')),
+              subtitle: Text(texts.translate('pulse_hint')),
+              leading: const Icon(Icons.graphic_eq),
+              trailing: const Icon(Icons.chevron_right),
+              onTap: () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (_) => PulseObservatoryScreen(
+                      controller: dietController,
+                    ),
+                  ),
+                );
+              },
+            ),
+            ListTile(
+              title: Text(texts.translate('macro_forge')),
+              subtitle: Text(texts.translate('macro_forge_hint')),
+              leading: const Icon(Icons.balcony),
+              trailing: const Icon(Icons.chevron_right),
+              onTap: () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (_) => MacroForgeScreen(controller: dietController),
+                  ),
+                );
+              },
+            ),
+            ListTile(
+              title: Text(texts.translate('legacy_capsule')),
+              subtitle: Text(texts.translate('legacy_capsule_hint')),
+              leading: const Icon(Icons.auto_awesome),
+              trailing: const Icon(Icons.chevron_right),
+              onTap: () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (_) => LegacyCapsuleScreen(
+                      controller: dietController,
+                    ),
                   ),
                 );
               },

@@ -211,6 +211,101 @@ class DietController extends ChangeNotifier {
       sparkle: .65,
     ),
   ];
+  final List<PulseWave> _pulseWaves = [
+    PulseWave(
+      id: 'aurora_sync',
+      titleEn: 'Aurora sync',
+      titleAr: 'تزامن الشفق',
+      charge: .68,
+      calm: .52,
+      graph: [.32, .54, .7, .58, .64, .72, .67],
+    ),
+    PulseWave(
+      id: 'city_still',
+      titleEn: 'City stillness',
+      titleAr: 'سكون المدينة',
+      charge: .46,
+      calm: .8,
+      graph: [.22, .3, .42, .6, .74, .62, .51],
+    ),
+    PulseWave(
+      id: 'pulse_dash',
+      titleEn: 'Pulse dash',
+      titleAr: 'اندفاع النبض',
+      charge: .82,
+      calm: .4,
+      graph: [.4, .58, .8, .72, .9, .78, .7],
+    ),
+  ];
+  int _pulseIndex = 0;
+  final List<MacroBlueprint> _macroBlueprints = [
+    MacroBlueprint(
+      id: 'radiant_reset',
+      titleEn: 'Radiant reset',
+      titleAr: 'إعادة الإشراق',
+      descriptionEn: 'Greens, ginger shots, and coconut water balance.',
+      descriptionAr: 'خضار ولقطات زنجبيل وماء جوز الهند للتوازن.',
+      protein: 32,
+      carbs: 48,
+      fats: 18,
+      micros: 12,
+      glow: .62,
+    ),
+    MacroBlueprint(
+      id: 'glow_forge',
+      titleEn: 'Glow forge',
+      titleAr: 'مصنع التوهج',
+      descriptionEn: 'Vibrant smoothie bowls with chia crunch.',
+      descriptionAr: 'أوعية سموذي نابضة مع قرمشة الشيا.',
+      protein: 28,
+      carbs: 56,
+      fats: 16,
+      micros: 15,
+      glow: .5,
+    ),
+    MacroBlueprint(
+      id: 'lunar_sustain',
+      titleEn: 'Lunar sustain',
+      titleAr: 'استدامة قمرية',
+      descriptionEn: 'Evening soups, oats, and calming cacao.',
+      descriptionAr: 'شوربات مسائية وشوفان وكاكاو مهدئ.',
+      protein: 24,
+      carbs: 40,
+      fats: 22,
+      micros: 18,
+      glow: .74,
+    ),
+  ];
+  int _macroIndex = 0;
+  final List<LegacyCapsule> _legacyCapsules = [
+    LegacyCapsule(
+      id: 'capsule_morning',
+      titleEn: 'Morning promise',
+      titleAr: 'وعد الصباح',
+      noteEn: 'Future me drinks water before any glow latte.',
+      noteAr: 'ذاتي المستقبلية تشرب الماء قبل أي لاتيه متوهج.',
+      timestamp: DateTime.now().subtract(const Duration(hours: 10)),
+      moodColor: Colors.amberAccent,
+    ),
+    LegacyCapsule(
+      id: 'capsule_stars',
+      titleEn: 'Under the stars',
+      titleAr: 'تحت النجوم',
+      noteEn: 'Night walks keep lungs light and thoughts gentle.',
+      noteAr: 'نزهات الليل تبقي الرئتين خفيفتين والأفكار ناعمة.',
+      timestamp: DateTime.now().subtract(const Duration(days: 1)),
+      moodColor: Colors.purpleAccent,
+    ),
+    LegacyCapsule(
+      id: 'capsule_future',
+      titleEn: 'Future broadcast',
+      titleAr: 'رسالة المستقبل',
+      noteEn: 'Remember the neon goal: nourish, breathe, repeat.',
+      noteAr: 'تذكر هدف النيون: تغذية وتنفس وتكرار.',
+      timestamp: DateTime.now().subtract(const Duration(days: 2)),
+      moodColor: Colors.tealAccent,
+    ),
+  ];
   final List<GrowthMission> _growthMissions = [
     GrowthMission(
       id: 'macro_focus',
@@ -663,6 +758,16 @@ class DietController extends ChangeNotifier {
   List<String> get mindfulStories => List.unmodifiable(_mindfulStories);
   List<ChallengeRoutine> get challenges => List.unmodifiable(_challenges);
   List<CoachMessage> get coachMessages => List.unmodifiable(_coachMessages);
+  List<PulseWave> get pulseWaves => List.unmodifiable(_pulseWaves);
+  PulseWave get currentPulseWave => _pulseWaves[_pulseIndex];
+  List<MacroBlueprint> get macroBlueprints =>
+      List.unmodifiable(_macroBlueprints);
+  MacroBlueprint get highlightedBlueprint =>
+      _macroBlueprints[_macroIndex];
+  List<LegacyCapsule> get legacyCapsules =>
+      List.unmodifiable(_legacyCapsules);
+  List<LegacyCapsule> get recentLegacyCapsules =>
+      _legacyCapsules.take(3).toList();
   List<RecipeIdea> get recipeIdeas => List.unmodifiable(_recipes);
   List<WellnessHabit> get habits => List.unmodifiable(_habits);
   List<GroceryItem> get groceryItems => List.unmodifiable(_groceries);
@@ -763,6 +868,82 @@ class DietController extends ChangeNotifier {
 
   void clearComparison() {
     _comparisonIds.clear();
+    notifyListeners();
+  }
+
+  void shiftPulseWave(int delta) {
+    if (_pulseWaves.isEmpty) return;
+    _pulseIndex = (_pulseIndex + delta) % _pulseWaves.length;
+    if (_pulseIndex < 0) {
+      _pulseIndex = _pulseWaves.length - 1;
+    }
+    notifyListeners();
+  }
+
+  void randomizePulseWave(String id) {
+    final wave = _pulseWaves.firstWhere((element) => element.id == id);
+    wave.charge = (wave.charge + (_random.nextDouble() * .2 - .1)).clamp(.2, .95);
+    wave.calm = (wave.calm + (_random.nextDouble() * .2 - .1)).clamp(.2, .95);
+    for (var i = 0; i < wave.graph.length; i++) {
+      wave.graph[i] =
+          (wave.graph[i] + (_random.nextDouble() * .3 - .15)).clamp(.1, .95);
+    }
+    notifyListeners();
+  }
+
+  void cycleMacroBlueprint([int delta = 1]) {
+    if (_macroBlueprints.isEmpty) return;
+    _macroIndex = (_macroIndex + delta) % _macroBlueprints.length;
+    if (_macroIndex < 0) {
+      _macroIndex = _macroBlueprints.length - 1;
+    }
+    notifyListeners();
+  }
+
+  void updateMacroGlow(String id, double glow) {
+    final blueprint = _macroBlueprints.firstWhere((element) => element.id == id);
+    blueprint.glow = glow.clamp(0, 1);
+    notifyListeners();
+  }
+
+  void updateMacroTargets(
+    String id, {
+    int? protein,
+    int? carbs,
+    int? fats,
+    int? micros,
+  }) {
+    final blueprint = _macroBlueprints.firstWhere((element) => element.id == id);
+    if (protein != null) blueprint.protein = protein;
+    if (carbs != null) blueprint.carbs = carbs;
+    if (fats != null) blueprint.fats = fats;
+    if (micros != null) blueprint.micros = micros;
+    notifyListeners();
+  }
+
+  void addLegacyCapsule(String title, String note) {
+    final trimmedTitle = title.trim();
+    final trimmedNote = note.trim();
+    if (trimmedTitle.isEmpty && trimmedNote.isEmpty) return;
+    final color = _visionPalette[_random.nextInt(_visionPalette.length)];
+    _legacyCapsules.insert(
+      0,
+      LegacyCapsule(
+        id: 'capsule_${DateTime.now().millisecondsSinceEpoch}',
+        titleEn: trimmedTitle.isEmpty ? 'Neon note' : trimmedTitle,
+        titleAr: trimmedTitle.isEmpty ? 'ملاحظة نيون' : trimmedTitle,
+        noteEn: trimmedNote.isEmpty ? trimmedTitle : trimmedNote,
+        noteAr: trimmedNote.isEmpty ? trimmedTitle : trimmedNote,
+        timestamp: DateTime.now(),
+        moodColor: color,
+      ),
+    );
+    notifyListeners();
+  }
+
+  void toggleLegacyFavorite(String id) {
+    final capsule = _legacyCapsules.firstWhere((element) => element.id == id);
+    capsule.favorite = !capsule.favorite;
     notifyListeners();
   }
 

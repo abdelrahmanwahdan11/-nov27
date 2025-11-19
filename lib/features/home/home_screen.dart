@@ -18,12 +18,15 @@ import '../grocery/grocery_planner_screen.dart';
 import '../habits/habit_studio_screen.dart';
 import '../insights/insights_screen.dart';
 import '../journey/journey_reflections_screen.dart';
+import '../journey/legacy_capsule_screen.dart';
+import '../plan/macro_forge_screen.dart';
 import '../plan/meal_plan_screen.dart';
 import '../recipes/recipe_lab_screen.dart';
 import '../recovery/recovery_suite_screen.dart';
 import '../recharge/energy_studio_screen.dart';
 import '../recharge/momentum_journal_screen.dart';
 import '../recharge/sleep_sanctuary_screen.dart';
+import '../recharge/pulse_observatory_screen.dart';
 import '../rewards/rewards_vault_screen.dart';
 import '../rituals/ritual_builder_screen.dart';
 import '../rhythm/rhythm_board_screen.dart';
@@ -507,6 +510,60 @@ class HomeScreen extends StatelessWidget {
                         ],
                       ).animate().fadeIn(delay: 300.ms).slideY(begin: .1),
                       const SizedBox(height: 24),
+                      SectionTitle(title: texts.translate('finale_suite')),
+                      const SizedBox(height: 8),
+                      Wrap(
+                        spacing: 12,
+                        runSpacing: 12,
+                        children: [
+                          _FinaleCard(
+                            icon: Icons.graphic_eq,
+                            title: texts.translate('pulse_observatory'),
+                            subtitle: texts.translate('pulse_hint'),
+                            colors: const [Colors.amberAccent, Colors.deepPurple],
+                            onTap: () {
+                              Navigator.of(context).push(
+                                MaterialPageRoute(
+                                  builder: (_) => PulseObservatoryScreen(
+                                    controller: dietController,
+                                  ),
+                                ),
+                              );
+                            },
+                          ),
+                          _FinaleCard(
+                            icon: Icons.balcony,
+                            title: texts.translate('macro_forge'),
+                            subtitle: texts.translate('macro_forge_hint'),
+                            colors: const [Colors.pinkAccent, Colors.blueAccent],
+                            onTap: () {
+                              Navigator.of(context).push(
+                                MaterialPageRoute(
+                                  builder: (_) => MacroForgeScreen(
+                                    controller: dietController,
+                                  ),
+                                ),
+                              );
+                            },
+                          ),
+                          _FinaleCard(
+                            icon: Icons.auto_awesome,
+                            title: texts.translate('legacy_capsule'),
+                            subtitle: texts.translate('legacy_capsule_hint'),
+                            colors: const [Colors.tealAccent, Colors.indigo],
+                            onTap: () {
+                              Navigator.of(context).push(
+                                MaterialPageRoute(
+                                  builder: (_) => LegacyCapsuleScreen(
+                                    controller: dietController,
+                                  ),
+                                ),
+                              );
+                            },
+                          ),
+                        ],
+                      ).animate().fadeIn(duration: 400.ms).slideY(begin: .1),
+                      const SizedBox(height: 24),
                       SectionTitle(title: texts.translate('catalog')),
                       SizedBox(
                         height: 220,
@@ -909,6 +966,59 @@ class _JourneySparkCard extends StatelessWidget {
             },
           ),
         ],
+      ),
+    );
+  }
+}
+
+class _FinaleCard extends StatelessWidget {
+  const _FinaleCard({
+    required this.icon,
+    required this.title,
+    required this.subtitle,
+    required this.colors,
+    required this.onTap,
+  });
+
+  final IconData icon;
+  final String title;
+  final String subtitle;
+  final List<Color> colors;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    final width = MediaQuery.of(context).size.width / 2 - 32;
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        width: width,
+        constraints: const BoxConstraints(minWidth: 160),
+        padding: const EdgeInsets.all(18),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(28),
+          gradient: LinearGradient(
+            colors: colors,
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+          ),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Icon(icon, size: 28, color: Colors.black87),
+            const SizedBox(height: 8),
+            Text(
+              title,
+              style: Theme.of(context).textTheme.titleMedium,
+            ),
+            const SizedBox(height: 4),
+            Text(
+              subtitle,
+              style: Theme.of(context).textTheme.bodySmall,
+            ),
+          ],
+        ),
       ),
     );
   }

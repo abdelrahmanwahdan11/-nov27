@@ -341,3 +341,84 @@ class MomentumMoment {
   String localizedDetail(Locale locale) =>
       locale.languageCode == 'ar' ? detailAr : detailEn;
 }
+
+class PulseWave {
+  PulseWave({
+    required this.id,
+    required this.titleEn,
+    required this.titleAr,
+    required this.charge,
+    required this.calm,
+    required this.graph,
+  });
+
+  final String id;
+  final String titleEn;
+  final String titleAr;
+  double charge;
+  double calm;
+  final List<double> graph;
+
+  String localizedTitle(Locale locale) =>
+      locale.languageCode == 'ar' ? titleAr : titleEn;
+}
+
+class MacroBlueprint {
+  MacroBlueprint({
+    required this.id,
+    required this.titleEn,
+    required this.titleAr,
+    required this.descriptionEn,
+    required this.descriptionAr,
+    required this.protein,
+    required this.carbs,
+    required this.fats,
+    required this.micros,
+    this.glow = .5,
+  });
+
+  final String id;
+  final String titleEn;
+  final String titleAr;
+  final String descriptionEn;
+  final String descriptionAr;
+  int protein;
+  int carbs;
+  int fats;
+  int micros;
+  double glow;
+
+  String localizedTitle(Locale locale) =>
+      locale.languageCode == 'ar' ? titleAr : titleEn;
+
+  String localizedDescription(Locale locale) =>
+      locale.languageCode == 'ar' ? descriptionAr : descriptionEn;
+}
+
+class LegacyCapsule {
+  LegacyCapsule({
+    required this.id,
+    required this.titleEn,
+    required this.titleAr,
+    required this.noteEn,
+    required this.noteAr,
+    required this.timestamp,
+    required this.moodColor,
+    this.favorite = false,
+  });
+
+  final String id;
+  final String titleEn;
+  final String titleAr;
+  final String noteEn;
+  final String noteAr;
+  final DateTime timestamp;
+  Color moodColor;
+  bool favorite;
+
+  String localizedTitle(Locale locale) =>
+      locale.languageCode == 'ar' ? titleAr : titleEn;
+
+  String localizedNote(Locale locale) =>
+      locale.languageCode == 'ar' ? noteAr : noteEn;
+}

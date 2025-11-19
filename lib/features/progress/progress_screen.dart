@@ -13,10 +13,13 @@ import '../focus/focus_gym_screen.dart';
 import '../growth/growth_arena_screen.dart';
 import '../insights/insights_screen.dart';
 import '../journey/journey_reflections_screen.dart';
+import '../journey/legacy_capsule_screen.dart';
+import '../plan/macro_forge_screen.dart';
 import '../recovery/recovery_suite_screen.dart';
 import '../recharge/energy_studio_screen.dart';
 import '../recharge/momentum_journal_screen.dart';
 import '../recharge/sleep_sanctuary_screen.dart';
+import '../recharge/pulse_observatory_screen.dart';
 import '../rewards/rewards_vault_screen.dart';
 import '../rhythm/rhythm_board_screen.dart';
 import '../vision/vision_board_screen.dart';
@@ -217,6 +220,21 @@ class _ProgressScreenState extends State<ProgressScreen> {
                 ],
               ),
             ).animate().fadeIn(duration: 400.ms).slideY(begin: .2),
+            const SizedBox(height: 24),
+            _PulsePreviewCard(controller: widget.controller)
+                .animate()
+                .fadeIn(duration: 400.ms)
+                .slideY(begin: .1),
+            const SizedBox(height: 16),
+            _MacroPreviewCard(controller: widget.controller)
+                .animate()
+                .fadeIn(duration: 400.ms)
+                .slideY(begin: .1),
+            const SizedBox(height: 16),
+            _LegacyPreviewCard(controller: widget.controller)
+                .animate()
+                .fadeIn(duration: 400.ms)
+                .slideY(begin: .1),
             const SizedBox(height: 24),
             if (!loading)
               Row(
@@ -426,6 +444,172 @@ class _EnergyOverviewCard extends StatelessWidget {
             Text('${(charge * 100).round()}%'),
           ],
         ),
+      ),
+    );
+  }
+}
+
+class _PulsePreviewCard extends StatelessWidget {
+  const _PulsePreviewCard({required this.controller});
+
+  final DietController controller;
+
+  @override
+  Widget build(BuildContext context) {
+    final texts = AppLocalizations.of(context);
+    final wave = controller.currentPulseWave;
+    return GestureDetector(
+      onTap: () {
+        Navigator.of(context).push(
+          MaterialPageRoute(
+            builder: (_) => PulseObservatoryScreen(controller: controller),
+          ),
+        );
+      },
+      child: Container(
+        padding: const EdgeInsets.all(20),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(28),
+          gradient: LinearGradient(
+            colors: [wave.calm.withOpacity(.4), wave.calm.withOpacity(.2)],
+          ),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(texts.translate('pulse_observatory'),
+                style: Theme.of(context).textTheme.titleMedium),
+            const SizedBox(height: 8),
+            Text(texts.translate('pulse_hint')),
+            const SizedBox(height: 12),
+            LinearProgressIndicator(value: wave.charge, color: Colors.amber),
+            const SizedBox(height: 4),
+            LinearProgressIndicator(value: wave.calm, color: Colors.cyanAccent),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _MacroPreviewCard extends StatelessWidget {
+  const _MacroPreviewCard({required this.controller});
+
+  final DietController controller;
+
+  @override
+  Widget build(BuildContext context) {
+    final texts = AppLocalizations.of(context);
+    final locale = Localizations.localeOf(context);
+    final blueprint = controller.highlightedBlueprint;
+    return GestureDetector(
+      onTap: () {
+        Navigator.of(context).push(
+          MaterialPageRoute(
+            builder: (_) => MacroForgeScreen(controller: controller),
+          ),
+        );
+      },
+      child: Container(
+        padding: const EdgeInsets.all(20),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(28),
+          color: Theme.of(context).colorScheme.surfaceVariant.withOpacity(.4),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(texts.translate('macro_forge'),
+                style: Theme.of(context).textTheme.titleMedium),
+            const SizedBox(height: 4),
+            Text(blueprint.localizedTitle(locale)),
+            const SizedBox(height: 12),
+            _MacroStat(
+                label: texts.translate('protein_label'),
+                value: blueprint.protein.toDouble()),
+            _MacroStat(
+                label: texts.translate('carbs_label'),
+                value: blueprint.carbs.toDouble()),
+            _MacroStat(
+                label: texts.translate('fats_label'),
+                value: blueprint.fats.toDouble()),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _LegacyPreviewCard extends StatelessWidget {
+  const _LegacyPreviewCard({required this.controller});
+
+  final DietController controller;
+
+  @override
+  Widget build(BuildContext context) {
+    final texts = AppLocalizations.of(context);
+    final locale = Localizations.localeOf(context);
+    final capsules = controller.recentLegacyCapsules;
+    return GestureDetector(
+      onTap: () {
+        Navigator.of(context).push(
+          MaterialPageRoute(
+            builder: (_) => LegacyCapsuleScreen(controller: controller),
+          ),
+        );
+      },
+      child: Container(
+        padding: const EdgeInsets.all(20),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(28),
+          gradient: LinearGradient(
+            colors: [
+              Theme.of(context).colorScheme.primary.withOpacity(.3),
+              Theme.of(context).colorScheme.secondary.withOpacity(.15),
+            ],
+          ),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(texts.translate('legacy_capsule'),
+                style: Theme.of(context).textTheme.titleMedium),
+            const SizedBox(height: 8),
+            ...capsules.map(
+              (capsule) => Padding(
+                padding: const EdgeInsets.only(bottom: 8),
+                child: Text('• ${capsule.localizedTitle(locale)}'),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _MacroStat extends StatelessWidget {
+  const _MacroStat({required this.label, required this.value});
+
+  final String label;
+  final double value;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 4),
+      child: Row(
+        children: [
+          Expanded(child: Text(label)),
+          SizedBox(
+            width: 140,
+            child: LinearProgressIndicator(
+              value: (value / 80).clamp(0, 1),
+            ),
+          ),
+          const SizedBox(width: 8),
+          Text('${value.round()} g'),
+        ],
       ),
     );
   }
