@@ -7,11 +7,13 @@ import '../../core/widgets/primary_button.dart';
 import '../../core/widgets/section_title.dart';
 import '../../data/mock_food_items.dart';
 import '../../models/food_item.dart';
+import '../../models/growth_models.dart';
 import '../catalog/food_detail_screen.dart';
 import '../coach/coach_chat_screen.dart';
 import '../community/community_challenges_screen.dart';
 import '../flow/flow_lab_screen.dart';
 import '../focus/focus_gym_screen.dart';
+import '../growth/growth_arena_screen.dart';
 import '../grocery/grocery_planner_screen.dart';
 import '../habits/habit_studio_screen.dart';
 import '../insights/insights_screen.dart';
@@ -24,6 +26,8 @@ import '../recharge/momentum_journal_screen.dart';
 import '../recharge/sleep_sanctuary_screen.dart';
 import '../rewards/rewards_vault_screen.dart';
 import '../rituals/ritual_builder_screen.dart';
+import '../rhythm/rhythm_board_screen.dart';
+import '../vision/vision_board_screen.dart';
 import '../wellness/wellness_hub_screen.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -219,6 +223,48 @@ class HomeScreen extends StatelessWidget {
                           .animate()
                           .fadeIn(duration: 400.ms)
                           .slideX(begin: -.1),
+                      const SizedBox(height: 16),
+                      SectionTitle(
+                        title: texts.translate('growth_preview_title'),
+                        action: TextButton(
+                          onPressed: () {
+                            Navigator.of(context).push(
+                              MaterialPageRoute(
+                                builder: (_) => GrowthArenaScreen(
+                                  controller: dietController,
+                                ),
+                              ),
+                            );
+                          },
+                          child: Text(texts.translate('see_all')),
+                        ),
+                      ),
+                      const SizedBox(height: 12),
+                      SizedBox(
+                        height: 160,
+                        child: ListView.separated(
+                          scrollDirection: Axis.horizontal,
+                          itemCount: dietController.growthMissions.length,
+                          separatorBuilder: (_, __) => const SizedBox(width: 12),
+                          itemBuilder: (context, index) {
+                            final mission =
+                                dietController.growthMissions[index];
+                            return _MissionPreviewCard(
+                              mission: mission,
+                              controller: dietController,
+                              texts: texts,
+                            )
+                                .animate(delay: (index * 80).ms)
+                                .fadeIn()
+                                .slideX(begin: .1);
+                          },
+                        ),
+                      ),
+                      const SizedBox(height: 16),
+                      _VisionPeekCard(controller: dietController, texts: texts)
+                          .animate()
+                          .fadeIn(duration: 400.ms)
+                          .slideY(begin: .1),
                       const SizedBox(height: 20),
                       Wrap(
                         spacing: 12,
@@ -419,6 +465,45 @@ class HomeScreen extends StatelessWidget {
                               );
                             },
                           ),
+                          _HomeActionTile(
+                            icon: Icons.trending_up,
+                            label: texts.translate('growth_arena_title'),
+                            onTap: () {
+                              Navigator.of(context).push(
+                                MaterialPageRoute(
+                                  builder: (_) => GrowthArenaScreen(
+                                    controller: dietController,
+                                  ),
+                                ),
+                              );
+                            },
+                          ),
+                          _HomeActionTile(
+                            icon: Icons.graphic_eq,
+                            label: texts.translate('rhythm_board_title'),
+                            onTap: () {
+                              Navigator.of(context).push(
+                                MaterialPageRoute(
+                                  builder: (_) => RhythmBoardScreen(
+                                    controller: dietController,
+                                  ),
+                                ),
+                              );
+                            },
+                          ),
+                          _HomeActionTile(
+                            icon: Icons.brush,
+                            label: texts.translate('vision_board_title'),
+                            onTap: () {
+                              Navigator.of(context).push(
+                                MaterialPageRoute(
+                                  builder: (_) => VisionBoardScreen(
+                                    controller: dietController,
+                                  ),
+                                ),
+                              );
+                            },
+                          ),
                         ],
                       ).animate().fadeIn(delay: 300.ms).slideY(begin: .1),
                       const SizedBox(height: 24),
@@ -497,6 +582,139 @@ class _EnergyPulseCard extends StatelessWidget {
             ),
             const SizedBox(height: 8),
             Text('${(charge * 100).round()}%'),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _MissionPreviewCard extends StatelessWidget {
+  const _MissionPreviewCard({
+    required this.mission,
+    required this.controller,
+    required this.texts,
+  });
+
+  final GrowthMission mission;
+  final DietController controller;
+  final AppLocalizations texts;
+
+  @override
+  Widget build(BuildContext context) {
+    final completion = (mission.progress / mission.target).clamp(0.0, 1.0);
+    final locale = Localizations.localeOf(context).languageCode;
+    final title = locale == 'ar' ? mission.titleAr : mission.titleEn;
+    final description =
+        locale == 'ar' ? mission.descriptionAr : mission.descriptionEn;
+    return Container(
+      width: 200,
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(24),
+        gradient: LinearGradient(
+          colors: [
+            Theme.of(context).colorScheme.primary.withOpacity(.6),
+            Theme.of(context).colorScheme.secondary.withOpacity(.2),
+          ],
+        ),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            title,
+            style: Theme.of(context)
+                .textTheme
+                .titleMedium
+                ?.copyWith(color: Colors.black),
+          ),
+          const SizedBox(height: 4),
+          Expanded(
+            child: Text(
+              description,
+              style: Theme.of(context)
+                  .textTheme
+                  .bodySmall
+                  ?.copyWith(color: Colors.black87),
+            ),
+          ),
+          const SizedBox(height: 8),
+          LinearProgressIndicator(value: completion),
+          const SizedBox(height: 4),
+          Text('${mission.progress.toStringAsFixed(0)} / ${mission.target}',
+              style: const TextStyle(color: Colors.black87)),
+          const SizedBox(height: 8),
+          Align(
+            alignment: Alignment.centerRight,
+            child: IconButton(
+              onPressed: () => controller.advanceGrowthMission(mission.id),
+              icon: const Icon(Icons.play_arrow, color: Colors.black),
+            ),
+          )
+        ],
+      ),
+    );
+  }
+}
+
+class _VisionPeekCard extends StatelessWidget {
+  const _VisionPeekCard({required this.controller, required this.texts});
+
+  final DietController controller;
+  final AppLocalizations texts;
+
+  @override
+  Widget build(BuildContext context) {
+    final entries = controller.visionEntries;
+    final pinned = entries.where((element) => element.pinned).toList();
+    final entry = pinned.isNotEmpty
+        ? pinned.first
+        : (entries.isNotEmpty ? entries.first : null);
+    return GestureDetector(
+      onTap: () {
+        Navigator.of(context).push(
+          MaterialPageRoute(
+            builder: (_) => VisionBoardScreen(controller: controller),
+          ),
+        );
+      },
+      child: Container(
+        width: double.infinity,
+        padding: const EdgeInsets.all(20),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(28),
+          gradient: LinearGradient(
+            colors: [
+              entry?.moodColor.withOpacity(.8) ??
+                  Theme.of(context).colorScheme.primary.withOpacity(.5),
+              entry?.moodColor.withOpacity(.4) ??
+                  Theme.of(context).colorScheme.secondary.withOpacity(.2),
+            ],
+          ),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(texts.translate('vision_peek_title'),
+                style: Theme.of(context)
+                    .textTheme
+                    .titleMedium
+                    ?.copyWith(color: Colors.black)),
+            const SizedBox(height: 6),
+            Text(
+              entry == null
+                  ? texts.translate('vision_empty_state')
+                  : (Localizations.localeOf(context).languageCode == 'ar'
+                      ? entry.titleAr
+                      : entry.titleEn),
+              style: const TextStyle(color: Colors.black87),
+            ),
+            const SizedBox(height: 8),
+            Text(
+              texts.translate('vision_peek_hint'),
+              style: const TextStyle(color: Colors.black87),
+            ),
           ],
         ),
       ),

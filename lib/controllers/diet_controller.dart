@@ -8,6 +8,7 @@ import '../data/mock_food_items.dart';
 import '../data/mock_stats.dart';
 import '../models/community_models.dart';
 import '../models/food_item.dart';
+import '../models/growth_models.dart';
 import '../models/weekly_stats.dart';
 import '../models/wellness_models.dart';
 
@@ -209,6 +210,102 @@ class DietController extends ChangeNotifier {
       calories: 195,
       sparkle: .65,
     ),
+  ];
+  final List<GrowthMission> _growthMissions = [
+    GrowthMission(
+      id: 'macro_focus',
+      titleEn: 'Macro focus sprints',
+      titleAr: 'سباقات تركيز المغذيات',
+      descriptionEn: 'Log three balanced plates with bold veggie tones.',
+      descriptionAr: 'سجل ثلاث وجبات متوازنة مع ألوان خضار بارزة.',
+      target: 3,
+      progress: 1,
+      highlighted: true,
+    ),
+    GrowthMission(
+      id: 'breath_walks',
+      titleEn: 'Breath-synced walks',
+      titleAr: 'نزهات متزامنة مع التنفس',
+      descriptionEn: 'Pair 10-minute walks with inhale-exhale counts.',
+      descriptionAr: 'اربط نزهات عشر دقائق بعدّات الشهيق والزفير.',
+      target: 5,
+      progress: 2,
+    ),
+    GrowthMission(
+      id: 'gratitude_bursts',
+      titleEn: 'Gratitude bursts',
+      titleAr: 'ومضات الامتنان',
+      descriptionEn: 'Capture micro journal sparks after meals.',
+      descriptionAr: 'دوّن شرارات الامتنان الصغيرة بعد الوجبات.',
+      target: 7,
+      progress: 4,
+    ),
+  ];
+  final List<RhythmCard> _rhythmCards = [
+    RhythmCard(
+      id: 'pulse_wave',
+      titleEn: 'Pulse wave',
+      titleAr: 'موجة النبض',
+      subtitleEn: 'Guide exhale to neon pulses.',
+      subtitleAr: 'وجّه الزفير مع نبضات النيون.',
+      bpm: 62,
+      waves: 3,
+      focus: .45,
+    ),
+    RhythmCard(
+      id: 'city_flow',
+      titleEn: 'City flow',
+      titleAr: 'تدفق المدينة',
+      subtitleEn: 'Match stride to skyline lights.',
+      subtitleAr: 'زامن الخطوات مع أضواء الأفق.',
+      bpm: 78,
+      waves: 4,
+      focus: .6,
+    ),
+    RhythmCard(
+      id: 'slow_bloom',
+      titleEn: 'Slow bloom',
+      titleAr: 'تفتح بطيء',
+      subtitleEn: 'Hold space between sips.',
+      subtitleAr: 'اصنع مساحة بين الرشفات.',
+      bpm: 54,
+      waves: 2,
+      focus: .35,
+    ),
+  ];
+  final List<VisionEntry> _visionEntries = [
+    VisionEntry(
+      id: 'neon_table',
+      titleEn: 'Neon table',
+      titleAr: 'طاولة نيون',
+      noteEn: 'Host a brunch with glowing citrus boards.',
+      noteAr: 'استضف فطوراً بلوحات حمضيات متوهجة.',
+      moodColor: Colors.amberAccent,
+      pinned: true,
+    ),
+    VisionEntry(
+      id: 'skyline_run',
+      titleEn: 'Skyline run',
+      titleAr: 'ركض الأفق',
+      noteEn: 'Track a sunrise jog with breathing beats.',
+      noteAr: 'تتبع ركض شروق الشمس بنبضات التنفس.',
+      moodColor: Colors.lightBlueAccent,
+    ),
+    VisionEntry(
+      id: 'desert_reset',
+      titleEn: 'Desert reset',
+      titleAr: 'إعادة الصحراء',
+      noteEn: 'Weekend retreat with sand meditations.',
+      noteAr: 'استراحة أسبوعية مع تأملات الرمال.',
+      moodColor: Colors.pinkAccent,
+    ),
+  ];
+  final List<Color> _visionPalette = [
+    Colors.amberAccent,
+    Colors.lightBlueAccent,
+    Colors.pinkAccent,
+    Colors.tealAccent,
+    Colors.deepPurpleAccent,
   ];
   final List<WellnessHabit> _habits = [
     WellnessHabit(
@@ -570,6 +667,9 @@ class DietController extends ChangeNotifier {
   List<WellnessHabit> get habits => List.unmodifiable(_habits);
   List<GroceryItem> get groceryItems => List.unmodifiable(_groceries);
   List<InsightCard> get insightCards => List.unmodifiable(_insights);
+  List<GrowthMission> get growthMissions => List.unmodifiable(_growthMissions);
+  List<RhythmCard> get rhythmCards => List.unmodifiable(_rhythmCards);
+  List<VisionEntry> get visionEntries => List.unmodifiable(_visionEntries);
   List<EnergyPattern> get energyPatterns => List.unmodifiable(_energyPatterns);
   List<double> get energySparkline => List.unmodifiable(_energySparkline);
   double get energyCharge => _energyCharge;
@@ -1049,6 +1149,103 @@ class DietController extends ChangeNotifier {
     }
     _insights.shuffle(rng);
     _insightHighlights.shuffle(rng);
+    notifyListeners();
+  }
+
+  void advanceGrowthMission(String id, {double delta = 1}) {
+    final mission = _growthMissions.firstWhere((element) => element.id == id);
+    mission.progress = (mission.progress + delta).clamp(0, mission.target.toDouble());
+    notifyListeners();
+  }
+
+  void toggleMissionHighlight(String id) {
+    final mission = _growthMissions.firstWhere((element) => element.id == id);
+    mission.highlighted = !mission.highlighted;
+    notifyListeners();
+  }
+
+  void resetGrowthMissions() {
+    for (final mission in _growthMissions) {
+      mission.progress = 0;
+      mission.highlighted = false;
+    }
+    if (_growthMissions.isNotEmpty) {
+      _growthMissions.first.highlighted = true;
+    }
+    notifyListeners();
+  }
+
+  void tuneRhythm(String id, {int bpmDelta = 4, double focusDelta = .05}) {
+    final rhythm = _rhythmCards.firstWhere((element) => element.id == id);
+    rhythm.bpm = (rhythm.bpm + bpmDelta).clamp(40, 120);
+    rhythm.focus = (rhythm.focus + focusDelta).clamp(0, 1);
+    notifyListeners();
+  }
+
+  void toggleRhythmExpansion(String id) {
+    final rhythm = _rhythmCards.firstWhere((element) => element.id == id);
+    rhythm.expanded = !rhythm.expanded;
+    notifyListeners();
+  }
+
+  void setRhythmBpm(String id, int bpm) {
+    final rhythm = _rhythmCards.firstWhere((element) => element.id == id);
+    rhythm.bpm = bpm.clamp(40, 120);
+    notifyListeners();
+  }
+
+  void setRhythmFocus(String id, double focus) {
+    final rhythm = _rhythmCards.firstWhere((element) => element.id == id);
+    rhythm.focus = focus.clamp(0, 1);
+    notifyListeners();
+  }
+
+  void shuffleRhythms() {
+    final rng = Random();
+    for (final rhythm in _rhythmCards) {
+      rhythm.bpm = 50 + rng.nextInt(40);
+      rhythm.waves = 2 + rng.nextInt(4);
+      rhythm.focus = rng.nextDouble();
+    }
+    notifyListeners();
+  }
+
+  void addVisionEntry({
+    required String titleEn,
+    required String titleAr,
+    required String noteEn,
+    required String noteAr,
+  }) {
+    final trimmedTitleEn = titleEn.trim();
+    final trimmedTitleAr = titleAr.trim();
+    if (trimmedTitleEn.isEmpty && trimmedTitleAr.isEmpty) return;
+    final color = _visionPalette[Random().nextInt(_visionPalette.length)];
+    _visionEntries.insert(
+      0,
+      VisionEntry(
+        id: UniqueKey().toString(),
+        titleEn: trimmedTitleEn.isEmpty ? trimmedTitleAr : trimmedTitleEn,
+        titleAr: trimmedTitleAr.isEmpty ? trimmedTitleEn : trimmedTitleAr,
+        noteEn: noteEn.trim().isEmpty ? trimmedTitleEn : noteEn.trim(),
+        noteAr: noteAr.trim().isEmpty ? trimmedTitleAr : noteAr.trim(),
+        moodColor: color,
+        pinned: true,
+      ),
+    );
+    notifyListeners();
+  }
+
+  void toggleVisionPin(String id) {
+    final entry = _visionEntries.firstWhere((element) => element.id == id);
+    entry.pinned = !entry.pinned;
+    notifyListeners();
+  }
+
+  void cycleVisionColor(String id) {
+    final entry = _visionEntries.firstWhere((element) => element.id == id);
+    final currentIndex = _visionPalette.indexOf(entry.moodColor);
+    final nextIndex = (currentIndex + 1) % _visionPalette.length;
+    entry.moodColor = _visionPalette[nextIndex];
     notifyListeners();
   }
 

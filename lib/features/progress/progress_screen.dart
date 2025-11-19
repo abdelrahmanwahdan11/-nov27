@@ -10,6 +10,7 @@ import '../coach/coach_chat_screen.dart';
 import '../community/community_challenges_screen.dart';
 import '../flow/flow_lab_screen.dart';
 import '../focus/focus_gym_screen.dart';
+import '../growth/growth_arena_screen.dart';
 import '../insights/insights_screen.dart';
 import '../journey/journey_reflections_screen.dart';
 import '../recovery/recovery_suite_screen.dart';
@@ -17,6 +18,8 @@ import '../recharge/energy_studio_screen.dart';
 import '../recharge/momentum_journal_screen.dart';
 import '../recharge/sleep_sanctuary_screen.dart';
 import '../rewards/rewards_vault_screen.dart';
+import '../rhythm/rhythm_board_screen.dart';
+import '../vision/vision_board_screen.dart';
 import 'journey_timeline_screen.dart';
 
 class ProgressScreen extends StatefulWidget {
@@ -325,6 +328,57 @@ class _ProgressScreenState extends State<ProgressScreen> {
                   ),
                 ],
               ).animate().fadeIn(duration: 500.ms).slideY(begin: .1),
+            if (!loading) const SizedBox(height: 12),
+            if (!loading)
+              Row(
+                children: [
+                  Expanded(
+                    child: _ProgressShortcut(
+                      icon: Icons.trending_up,
+                      label: texts.translate('growth_arena_title'),
+                      onTap: () {
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (_) => GrowthArenaScreen(
+                              controller: widget.controller,
+                            ),
+                          ),
+                        );
+                      },
+                    ),
+                  ),
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: _ProgressShortcut(
+                      icon: Icons.graphic_eq,
+                      label: texts.translate('rhythm_board_title'),
+                      onTap: () {
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (_) => RhythmBoardScreen(
+                              controller: widget.controller,
+                            ),
+                          ),
+                        );
+                      },
+                    ),
+                  ),
+                ],
+              ).animate().fadeIn(duration: 500.ms).slideY(begin: .1),
+            if (!loading) const SizedBox(height: 12),
+            if (!loading)
+              PrimaryButton(
+                label: texts.translate('vision_board_title'),
+                onPressed: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (_) => VisionBoardScreen(
+                        controller: widget.controller,
+                      ),
+                    ),
+                  );
+                },
+              ).animate().fadeIn(duration: 400.ms).slideY(begin: .1),
           ],
         ),
       ),

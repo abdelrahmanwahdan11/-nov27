@@ -9,6 +9,7 @@ import '../coach/coach_chat_screen.dart';
 import '../community/community_challenges_screen.dart';
 import '../flow/flow_lab_screen.dart';
 import '../focus/focus_gym_screen.dart';
+import '../growth/growth_arena_screen.dart';
 import '../grocery/grocery_planner_screen.dart';
 import '../habits/habit_studio_screen.dart';
 import '../insights/insights_screen.dart';
@@ -20,6 +21,8 @@ import '../recharge/momentum_journal_screen.dart';
 import '../recharge/sleep_sanctuary_screen.dart';
 import '../rewards/rewards_vault_screen.dart';
 import '../rituals/ritual_builder_screen.dart';
+import '../rhythm/rhythm_board_screen.dart';
+import '../vision/vision_board_screen.dart';
 import '../wellness/wellness_hub_screen.dart';
 
 class ProfileScreen extends StatelessWidget {
@@ -157,6 +160,45 @@ class ProfileScreen extends StatelessWidget {
                 Navigator.of(context).push(
                   MaterialPageRoute(
                     builder: (_) => SleepSanctuaryScreen(controller: dietController),
+                  ),
+                );
+              },
+            ),
+            ListTile(
+              title: Text(texts.translate('growth_arena_title')),
+              subtitle: Text(texts.translate('growth_arena_caption')),
+              leading: const Icon(Icons.trending_up),
+              trailing: const Icon(Icons.chevron_right),
+              onTap: () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (_) => GrowthArenaScreen(controller: dietController),
+                  ),
+                );
+              },
+            ),
+            ListTile(
+              title: Text(texts.translate('rhythm_board_title')),
+              subtitle: Text(texts.translate('growth_boost_hint')),
+              leading: const Icon(Icons.graphic_eq),
+              trailing: const Icon(Icons.chevron_right),
+              onTap: () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (_) => RhythmBoardScreen(controller: dietController),
+                  ),
+                );
+              },
+            ),
+            ListTile(
+              title: Text(texts.translate('vision_board_title')),
+              subtitle: Text(texts.translate('vision_peek_hint')),
+              leading: const Icon(Icons.brush),
+              trailing: const Icon(Icons.chevron_right),
+              onTap: () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (_) => VisionBoardScreen(controller: dietController),
                   ),
                 );
               },
