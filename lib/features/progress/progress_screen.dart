@@ -8,6 +8,9 @@ import '../../core/widgets/skeleton.dart';
 import '../../models/weekly_stats.dart';
 import '../coach/coach_chat_screen.dart';
 import '../community/community_challenges_screen.dart';
+import '../finale/clarity_console_screen.dart';
+import '../finale/eclipse_program_screen.dart';
+import '../finale/sync_arena_screen.dart';
 import '../flow/flow_lab_screen.dart';
 import '../focus/focus_gym_screen.dart';
 import '../growth/growth_arena_screen.dart';
@@ -397,6 +400,97 @@ class _ProgressScreenState extends State<ProgressScreen> {
                   );
                 },
               ).animate().fadeIn(duration: 400.ms).slideY(begin: .1),
+            if (!loading) const SizedBox(height: 24),
+            if (!loading)
+              _FinaleShortcutCard(
+                icon: Icons.nightlight_round,
+                title: texts.translate('eclipse_programs'),
+                subtitle: texts.translate('eclipse_hint'),
+                colors: const [Colors.deepPurpleAccent, Colors.indigo],
+                onTap: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (_) => EclipseProgramScreen(
+                        controller: widget.controller,
+                      ),
+                    ),
+                  );
+                },
+              ).animate().fadeIn(duration: 400.ms).slideY(begin: .1),
+            if (!loading) const SizedBox(height: 12),
+            if (!loading)
+              _FinaleShortcutCard(
+                icon: Icons.tune,
+                title: texts.translate('clarity_console'),
+                subtitle: texts.translate('clarity_hint'),
+                colors: const [Colors.blueAccent, Colors.cyanAccent],
+                onTap: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (_) => ClarityConsoleScreen(
+                        controller: widget.controller,
+                      ),
+                    ),
+                  );
+                },
+              ).animate().fadeIn(duration: 400.ms).slideY(begin: .1),
+            if (!loading) const SizedBox(height: 12),
+            if (!loading)
+              _FinaleShortcutCard(
+                icon: Icons.groups_2,
+                title: texts.translate('sync_arena'),
+                subtitle: texts.translate('sync_hint'),
+                colors: const [Colors.pinkAccent, Colors.deepPurpleAccent],
+                onTap: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (_) => SyncArenaScreen(
+                        controller: widget.controller,
+                      ),
+                    ),
+                  );
+                },
+              ).animate().fadeIn(duration: 400.ms).slideY(begin: .1),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _FinaleShortcutCard extends StatelessWidget {
+  const _FinaleShortcutCard({
+    required this.icon,
+    required this.title,
+    required this.subtitle,
+    required this.colors,
+    required this.onTap,
+  });
+
+  final IconData icon;
+  final String title;
+  final String subtitle;
+  final List<Color> colors;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        padding: const EdgeInsets.all(20),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(28),
+          gradient: LinearGradient(colors: colors),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Icon(icon),
+            const SizedBox(height: 12),
+            Text(title, style: Theme.of(context).textTheme.titleMedium),
+            const SizedBox(height: 6),
+            Text(subtitle),
           ],
         ),
       ),

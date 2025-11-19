@@ -11,6 +11,9 @@ import '../../models/growth_models.dart';
 import '../catalog/food_detail_screen.dart';
 import '../coach/coach_chat_screen.dart';
 import '../community/community_challenges_screen.dart';
+import '../finale/clarity_console_screen.dart';
+import '../finale/eclipse_program_screen.dart';
+import '../finale/sync_arena_screen.dart';
 import '../flow/flow_lab_screen.dart';
 import '../focus/focus_gym_screen.dart';
 import '../growth/growth_arena_screen.dart';
@@ -555,6 +558,51 @@ class HomeScreen extends StatelessWidget {
                               Navigator.of(context).push(
                                 MaterialPageRoute(
                                   builder: (_) => LegacyCapsuleScreen(
+                                    controller: dietController,
+                                  ),
+                                ),
+                              );
+                            },
+                          ),
+                          _FinaleCard(
+                            icon: Icons.nightlight_round,
+                            title: texts.translate('eclipse_programs'),
+                            subtitle: texts.translate('eclipse_hint'),
+                            colors: const [Colors.deepPurpleAccent, Colors.blueGrey],
+                            onTap: () {
+                              Navigator.of(context).push(
+                                MaterialPageRoute(
+                                  builder: (_) => EclipseProgramScreen(
+                                    controller: dietController,
+                                  ),
+                                ),
+                              );
+                            },
+                          ),
+                          _FinaleCard(
+                            icon: Icons.tune,
+                            title: texts.translate('clarity_console'),
+                            subtitle: texts.translate('clarity_hint'),
+                            colors: const [Colors.blueAccent, Colors.cyanAccent],
+                            onTap: () {
+                              Navigator.of(context).push(
+                                MaterialPageRoute(
+                                  builder: (_) => ClarityConsoleScreen(
+                                    controller: dietController,
+                                  ),
+                                ),
+                              );
+                            },
+                          ),
+                          _FinaleCard(
+                            icon: Icons.groups_2,
+                            title: texts.translate('sync_arena'),
+                            subtitle: texts.translate('sync_hint'),
+                            colors: const [Colors.pinkAccent, Colors.deepPurpleAccent],
+                            onTap: () {
+                              Navigator.of(context).push(
+                                MaterialPageRoute(
+                                  builder: (_) => SyncArenaScreen(
                                     controller: dietController,
                                   ),
                                 ),

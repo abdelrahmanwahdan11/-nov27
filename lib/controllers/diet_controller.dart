@@ -306,6 +306,105 @@ class DietController extends ChangeNotifier {
       moodColor: Colors.tealAccent,
     ),
   ];
+  final List<EclipseProgram> _eclipsePrograms = [
+    EclipseProgram(
+      id: 'orbit_focus',
+      titleEn: 'Orbit focus',
+      titleAr: 'تركيز المدار',
+      focusEn: 'Align posture with citrus breathing.',
+      focusAr: 'اضبط الوقفة مع تنفس الحمضيات.',
+      loops: 3,
+      alignment: .72,
+      wave: [.12, .42, .74, .68, .8, .62, .7],
+      accent: Colors.amberAccent,
+      active: true,
+    ),
+    EclipseProgram(
+      id: 'lunar_hum',
+      titleEn: 'Lunar hum',
+      titleAr: 'همهمة قمرية',
+      focusEn: 'Evening sip cadence with hum-backed exhales.',
+      focusAr: 'إيقاع رشفات مسائي مع زفير هامس.',
+      loops: 4,
+      alignment: .64,
+      wave: [.2, .38, .5, .62, .58, .7, .54],
+      accent: Colors.deepPurpleAccent,
+    ),
+    EclipseProgram(
+      id: 'solar_stride',
+      titleEn: 'Solar stride',
+      titleAr: 'خطوة شمسية',
+      focusEn: 'Stride, sip, and hold with sunrise playlists.',
+      focusAr: 'خطوة ورشفة وتوقف مع قوائم شروق.',
+      loops: 5,
+      alignment: .78,
+      wave: [.3, .52, .74, .82, .76, .84, .72],
+      accent: Colors.tealAccent,
+    ),
+  ];
+  double _clarityFocus = .66;
+  final List<ClaritySignal> _claritySignals = [
+    ClaritySignal(
+      id: 'lens_reset',
+      labelEn: 'Lens reset',
+      labelAr: 'إعادة العدسة',
+      descriptionEn: 'Blink slow, sip mint, relax the jaw.',
+      descriptionAr: 'أغمض ببطء واشرب النعناع وأرخ الفك.',
+      current: .48,
+      target: .76,
+      trend: .18,
+    ),
+    ClaritySignal(
+      id: 'focus_arc',
+      labelEn: 'Focus arc',
+      labelAr: 'قوس التركيز',
+      descriptionEn: '20-second gaze ladder plus breath ladder.',
+      descriptionAr: 'سلم نظرات 20 ثانية مع سلم أنفاس.',
+      current: .6,
+      target: .82,
+      trend: .1,
+    ),
+    ClaritySignal(
+      id: 'calm_scan',
+      labelEn: 'Calm scan',
+      labelAr: 'مسح الهدوء',
+      descriptionEn: 'Neck roll, straw sip, shoulder soften.',
+      descriptionAr: 'لف الرقبة، رشفة بالقصبة، أكتاف لينة.',
+      current: .55,
+      target: .78,
+      trend: .04,
+    ),
+  ];
+  final List<SyncDrill> _syncDrills = [
+    SyncDrill(
+      id: 'triad_flow',
+      titleEn: 'Triad flow',
+      titleAr: 'تدفق ثلاثي',
+      cuesEn: ['Inhale count', 'Hold + sip', 'Side tilt reset'],
+      cuesAr: ['عد الشهيق', 'توقف مع رشفة', 'ميل جانبي لإعادة الضبط'],
+      rounds: 3,
+      progress: .4,
+      completedRounds: 1,
+    ),
+    SyncDrill(
+      id: 'pulse_circle',
+      titleEn: 'Pulse circle',
+      titleAr: 'دائرة النبض',
+      cuesEn: ['Tap shoulders', 'Rotate wrists', 'Sip + smile'],
+      cuesAr: ['طرق على الكتفين', 'لف المعصمين', 'رشفة وابتسامة'],
+      rounds: 4,
+      progress: .25,
+    ),
+    SyncDrill(
+      id: 'glow_chain',
+      titleEn: 'Glow chain',
+      titleAr: 'سلسلة التوهج',
+      cuesEn: ['Count steps', 'Share gratitude', 'Hydration cheer'],
+      cuesAr: ['عد الخطوات', 'شارك الامتنان', 'تحية الترطيب'],
+      rounds: 5,
+      progress: .2,
+    ),
+  ];
   final List<GrowthMission> _growthMissions = [
     GrowthMission(
       id: 'macro_focus',
@@ -768,6 +867,12 @@ class DietController extends ChangeNotifier {
       List.unmodifiable(_legacyCapsules);
   List<LegacyCapsule> get recentLegacyCapsules =>
       _legacyCapsules.take(3).toList();
+  List<EclipseProgram> get eclipsePrograms =>
+      List.unmodifiable(_eclipsePrograms);
+  double get clarityFocus => _clarityFocus;
+  List<ClaritySignal> get claritySignals =>
+      List.unmodifiable(_claritySignals);
+  List<SyncDrill> get syncDrills => List.unmodifiable(_syncDrills);
   List<RecipeIdea> get recipeIdeas => List.unmodifiable(_recipes);
   List<WellnessHabit> get habits => List.unmodifiable(_habits);
   List<GroceryItem> get groceryItems => List.unmodifiable(_groceries);
@@ -944,6 +1049,32 @@ class DietController extends ChangeNotifier {
   void toggleLegacyFavorite(String id) {
     final capsule = _legacyCapsules.firstWhere((element) => element.id == id);
     capsule.favorite = !capsule.favorite;
+    notifyListeners();
+  }
+
+  void toggleEclipseProgram(String id) {
+    final program = _eclipsePrograms.firstWhere((element) => element.id == id);
+    program.active = !program.active;
+    notifyListeners();
+  }
+
+  void setClarityFocus(double value) {
+    _clarityFocus = value.clamp(0, 1);
+    notifyListeners();
+  }
+
+  void pulseClaritySignal(String id, [double delta = .08]) {
+    final signal = _claritySignals.firstWhere((element) => element.id == id);
+    signal.current = (signal.current + delta).clamp(0, 1);
+    signal.trend = (signal.current - signal.target).clamp(-1, 1);
+    notifyListeners();
+  }
+
+  void advanceSyncDrill(String id) {
+    final drill = _syncDrills.firstWhere((element) => element.id == id);
+    drill.completedRounds =
+        (drill.completedRounds + 1).clamp(0, drill.rounds).toInt();
+    drill.progress = (drill.completedRounds / drill.rounds).clamp(0, 1);
     notifyListeners();
   }
 

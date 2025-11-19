@@ -422,3 +422,91 @@ class LegacyCapsule {
   String localizedNote(Locale locale) =>
       locale.languageCode == 'ar' ? noteAr : noteEn;
 }
+
+class EclipseProgram {
+  EclipseProgram({
+    required this.id,
+    required this.titleEn,
+    required this.titleAr,
+    required this.focusEn,
+    required this.focusAr,
+    required this.loops,
+    required this.alignment,
+    required this.wave,
+    required this.accent,
+    this.active = false,
+  });
+
+  final String id;
+  final String titleEn;
+  final String titleAr;
+  final String focusEn;
+  final String focusAr;
+  final int loops;
+  final double alignment;
+  final List<double> wave;
+  final Color accent;
+  bool active;
+
+  String localizedTitle(Locale locale) =>
+      locale.languageCode == 'ar' ? titleAr : titleEn;
+
+  String localizedFocus(Locale locale) =>
+      locale.languageCode == 'ar' ? focusAr : focusEn;
+}
+
+class ClaritySignal {
+  ClaritySignal({
+    required this.id,
+    required this.labelEn,
+    required this.labelAr,
+    required this.descriptionEn,
+    required this.descriptionAr,
+    this.current = .4,
+    this.target = .8,
+    this.trend = .0,
+  });
+
+  final String id;
+  final String labelEn;
+  final String labelAr;
+  final String descriptionEn;
+  final String descriptionAr;
+  double current;
+  double target;
+  double trend;
+
+  String localizedLabel(Locale locale) =>
+      locale.languageCode == 'ar' ? labelAr : labelEn;
+
+  String localizedDescription(Locale locale) =>
+      locale.languageCode == 'ar' ? descriptionAr : descriptionEn;
+}
+
+class SyncDrill {
+  SyncDrill({
+    required this.id,
+    required this.titleEn,
+    required this.titleAr,
+    required this.cuesEn,
+    required this.cuesAr,
+    required this.rounds,
+    this.completedRounds = 0,
+    this.progress = .2,
+  });
+
+  final String id;
+  final String titleEn;
+  final String titleAr;
+  final List<String> cuesEn;
+  final List<String> cuesAr;
+  final int rounds;
+  int completedRounds;
+  double progress;
+
+  String localizedTitle(Locale locale) =>
+      locale.languageCode == 'ar' ? titleAr : titleEn;
+
+  List<String> localizedCues(Locale locale) =>
+      locale.languageCode == 'ar' ? cuesAr : cuesEn;
+}

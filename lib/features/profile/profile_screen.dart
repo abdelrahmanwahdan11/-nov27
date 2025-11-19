@@ -7,6 +7,9 @@ import '../../core/localization/app_localizations.dart';
 import '../../core/theme/app_theme.dart';
 import '../coach/coach_chat_screen.dart';
 import '../community/community_challenges_screen.dart';
+import '../finale/clarity_console_screen.dart';
+import '../finale/eclipse_program_screen.dart';
+import '../finale/sync_arena_screen.dart';
 import '../flow/flow_lab_screen.dart';
 import '../focus/focus_gym_screen.dart';
 import '../growth/growth_arena_screen.dart';
@@ -243,6 +246,51 @@ class ProfileScreen extends StatelessWidget {
                 Navigator.of(context).push(
                   MaterialPageRoute(
                     builder: (_) => LegacyCapsuleScreen(
+                      controller: dietController,
+                    ),
+                  ),
+                );
+              },
+            ),
+            ListTile(
+              title: Text(texts.translate('eclipse_programs')),
+              subtitle: Text(texts.translate('eclipse_hint')),
+              leading: const Icon(Icons.nightlight_round),
+              trailing: const Icon(Icons.chevron_right),
+              onTap: () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (_) => EclipseProgramScreen(
+                      controller: dietController,
+                    ),
+                  ),
+                );
+              },
+            ),
+            ListTile(
+              title: Text(texts.translate('clarity_console')),
+              subtitle: Text(texts.translate('clarity_hint')),
+              leading: const Icon(Icons.tune),
+              trailing: const Icon(Icons.chevron_right),
+              onTap: () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (_) => ClarityConsoleScreen(
+                      controller: dietController,
+                    ),
+                  ),
+                );
+              },
+            ),
+            ListTile(
+              title: Text(texts.translate('sync_arena')),
+              subtitle: Text(texts.translate('sync_hint')),
+              leading: const Icon(Icons.groups_2),
+              trailing: const Icon(Icons.chevron_right),
+              onTap: () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (_) => SyncArenaScreen(
                       controller: dietController,
                     ),
                   ),
