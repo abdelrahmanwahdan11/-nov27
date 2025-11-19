@@ -10,6 +10,9 @@ import '../coach/coach_chat_screen.dart';
 import '../community/community_challenges_screen.dart';
 import '../insights/insights_screen.dart';
 import '../recovery/recovery_suite_screen.dart';
+import '../recharge/energy_studio_screen.dart';
+import '../recharge/momentum_journal_screen.dart';
+import '../recharge/sleep_sanctuary_screen.dart';
 import '../rewards/rewards_vault_screen.dart';
 import 'journey_timeline_screen.dart';
 
@@ -94,6 +97,18 @@ class _ProgressScreenState extends State<ProgressScreen> {
                   .animate()
                   .fadeIn(duration: 400.ms)
                   .slideY(begin: .2),
+            if (!loading) const SizedBox(height: 16),
+            if (!loading)
+              _EnergyOverviewCard(controller: widget.controller)
+                  .animate()
+                  .fadeIn(duration: 400.ms)
+                  .slideY(begin: .1),
+            if (!loading) const SizedBox(height: 16),
+            if (!loading)
+              _SleepOverviewCard(controller: widget.controller)
+                  .animate()
+                  .fadeIn(duration: 400.ms)
+                  .slideY(begin: .1),
             const SizedBox(height: 16),
             if (loading)
               const Skeleton(height: 48)
@@ -104,6 +119,20 @@ class _ProgressScreenState extends State<ProgressScreen> {
                   Navigator.of(context).push(
                     MaterialPageRoute(
                       builder: (_) => InsightsScreen(
+                        controller: widget.controller,
+                      ),
+                    ),
+                  );
+                },
+              ).animate().fadeIn(duration: 400.ms).slideY(begin: .1),
+            if (!loading) const SizedBox(height: 12),
+            if (!loading)
+              PrimaryButton(
+                label: texts.translate('momentum_cta'),
+                onPressed: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (_) => MomentumJournalScreen(
                         controller: widget.controller,
                       ),
                     ),
@@ -214,6 +243,138 @@ class _ProgressScreenState extends State<ProgressScreen> {
                   ),
                 ],
               ).animate().fadeIn(duration: 500.ms).slideY(begin: .1),
+            if (!loading) const SizedBox(height: 12),
+            if (!loading)
+              Row(
+                children: [
+                  Expanded(
+                    child: _ProgressShortcut(
+                      icon: Icons.bolt,
+                      label: texts.translate('energy_studio_cta'),
+                      onTap: () {
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (_) => EnergyStudioScreen(
+                              controller: widget.controller,
+                            ),
+                          ),
+                        );
+                      },
+                    ),
+                  ),
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: _ProgressShortcut(
+                      icon: Icons.nights_stay,
+                      label: texts.translate('sleep_sanctuary_cta'),
+                      onTap: () {
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (_) => SleepSanctuaryScreen(
+                              controller: widget.controller,
+                            ),
+                          ),
+                        );
+                      },
+                    ),
+                  ),
+                ],
+              ).animate().fadeIn(duration: 500.ms).slideY(begin: .1),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _EnergyOverviewCard extends StatelessWidget {
+  const _EnergyOverviewCard({required this.controller});
+
+  final DietController controller;
+
+  @override
+  Widget build(BuildContext context) {
+    final texts = AppLocalizations.of(context);
+    final charge = controller.energyCharge;
+    return GestureDetector(
+      onTap: () {
+        Navigator.of(context).push(
+          MaterialPageRoute(
+            builder: (_) => EnergyStudioScreen(controller: controller),
+          ),
+        );
+      },
+      child: Container(
+        padding: const EdgeInsets.all(20),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(28),
+          color: Theme.of(context).colorScheme.surfaceVariant.withOpacity(.5),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(texts.translate('energy_studio'),
+                style: Theme.of(context).textTheme.titleMedium),
+            const SizedBox(height: 8),
+            Text(texts.translate('energy_wave_hint')),
+            const SizedBox(height: 12),
+            TweenAnimationBuilder<double>(
+              tween: Tween(begin: 0, end: charge),
+              duration: const Duration(milliseconds: 400),
+              builder: (context, value, _) => LinearProgressIndicator(value: value),
+            ),
+            const SizedBox(height: 8),
+            Text('${(charge * 100).round()}%'),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _SleepOverviewCard extends StatelessWidget {
+  const _SleepOverviewCard({required this.controller});
+
+  final DietController controller;
+
+  @override
+  Widget build(BuildContext context) {
+    final texts = AppLocalizations.of(context);
+    final progress = controller.windDownProgress;
+    return GestureDetector(
+      onTap: () {
+        Navigator.of(context).push(
+          MaterialPageRoute(
+            builder: (_) => SleepSanctuaryScreen(controller: controller),
+          ),
+        );
+      },
+      child: Container(
+        padding: const EdgeInsets.all(20),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(28),
+          gradient: LinearGradient(
+            colors: [
+              Theme.of(context).colorScheme.primary.withOpacity(.25),
+              Theme.of(context).colorScheme.secondary.withOpacity(.1),
+            ],
+          ),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(texts.translate('sleep_sanctuary'),
+                style: Theme.of(context).textTheme.titleMedium),
+            const SizedBox(height: 8),
+            Text(texts.translate('sleep_preview')),
+            const SizedBox(height: 12),
+            TweenAnimationBuilder<double>(
+              tween: Tween(begin: 0, end: progress),
+              duration: const Duration(milliseconds: 400),
+              builder: (context, value, _) => LinearProgressIndicator(value: value),
+            ),
+            const SizedBox(height: 8),
+            Text('${(progress * 100).round()}%'),
           ],
         ),
       ),

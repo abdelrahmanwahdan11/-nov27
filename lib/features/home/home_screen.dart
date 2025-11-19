@@ -16,6 +16,9 @@ import '../insights/insights_screen.dart';
 import '../plan/meal_plan_screen.dart';
 import '../recipes/recipe_lab_screen.dart';
 import '../recovery/recovery_suite_screen.dart';
+import '../recharge/energy_studio_screen.dart';
+import '../recharge/momentum_journal_screen.dart';
+import '../recharge/sleep_sanctuary_screen.dart';
 import '../rewards/rewards_vault_screen.dart';
 import '../rituals/ritual_builder_screen.dart';
 import '../wellness/wellness_hub_screen.dart';
@@ -189,6 +192,16 @@ class HomeScreen extends StatelessWidget {
                         ),
                       ).animate().fadeIn(delay: 200.ms).slideX(begin: -.1),
                       const SizedBox(height: 20),
+                      _EnergyPulseCard(controller: dietController, texts: texts)
+                          .animate()
+                          .fadeIn(duration: 400.ms)
+                          .slideY(begin: .1),
+                      const SizedBox(height: 16),
+                      _SleepWindDownCard(controller: dietController, texts: texts)
+                          .animate()
+                          .fadeIn(duration: 400.ms)
+                          .slideY(begin: .1),
+                      const SizedBox(height: 20),
                       Wrap(
                         spacing: 12,
                         runSpacing: 12,
@@ -310,6 +323,45 @@ class HomeScreen extends StatelessWidget {
                               );
                             },
                           ),
+                          _HomeActionTile(
+                            icon: Icons.bolt,
+                            label: texts.translate('energy_studio_cta'),
+                            onTap: () {
+                              Navigator.of(context).push(
+                                MaterialPageRoute(
+                                  builder: (_) => EnergyStudioScreen(
+                                    controller: dietController,
+                                  ),
+                                ),
+                              );
+                            },
+                          ),
+                          _HomeActionTile(
+                            icon: Icons.nights_stay,
+                            label: texts.translate('sleep_sanctuary_cta'),
+                            onTap: () {
+                              Navigator.of(context).push(
+                                MaterialPageRoute(
+                                  builder: (_) => SleepSanctuaryScreen(
+                                    controller: dietController,
+                                  ),
+                                ),
+                              );
+                            },
+                          ),
+                          _HomeActionTile(
+                            icon: Icons.timeline,
+                            label: texts.translate('momentum_cta'),
+                            onTap: () {
+                              Navigator.of(context).push(
+                                MaterialPageRoute(
+                                  builder: (_) => MomentumJournalScreen(
+                                    controller: dietController,
+                                  ),
+                                ),
+                              );
+                            },
+                          ),
                         ],
                       ).animate().fadeIn(delay: 300.ms).slideY(begin: .1),
                       const SizedBox(height: 24),
@@ -337,6 +389,109 @@ class HomeScreen extends StatelessWidget {
           ),
         );
       },
+    );
+  }
+}
+
+class _EnergyPulseCard extends StatelessWidget {
+  const _EnergyPulseCard({required this.controller, required this.texts});
+
+  final DietController controller;
+  final AppLocalizations texts;
+
+  @override
+  Widget build(BuildContext context) {
+    final charge = controller.energyCharge;
+    return GestureDetector(
+      onTap: () {
+        Navigator.of(context).push(
+          MaterialPageRoute(
+            builder: (_) => EnergyStudioScreen(controller: controller),
+          ),
+        );
+      },
+      child: Container(
+        width: double.infinity,
+        padding: const EdgeInsets.all(20),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(28),
+          gradient: LinearGradient(
+            colors: [
+              Theme.of(context).colorScheme.primary.withOpacity(.35),
+              Theme.of(context).colorScheme.secondary.withOpacity(.15),
+            ],
+          ),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(texts.translate('energy_studio'),
+                style: Theme.of(context).textTheme.titleLarge),
+            const SizedBox(height: 8),
+            Text(texts.translate('energy_wave_hint')),
+            const SizedBox(height: 12),
+            TweenAnimationBuilder<double>(
+              key: ValueKey(charge),
+              tween: Tween(begin: 0, end: charge),
+              duration: const Duration(milliseconds: 500),
+              builder: (context, value, _) {
+                return LinearProgressIndicator(value: value);
+              },
+            ),
+            const SizedBox(height: 8),
+            Text('${(charge * 100).round()}%'),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _SleepWindDownCard extends StatelessWidget {
+  const _SleepWindDownCard({required this.controller, required this.texts});
+
+  final DietController controller;
+  final AppLocalizations texts;
+
+  @override
+  Widget build(BuildContext context) {
+    final progress = controller.windDownProgress;
+    return GestureDetector(
+      onTap: () {
+        Navigator.of(context).push(
+          MaterialPageRoute(
+            builder: (_) => SleepSanctuaryScreen(controller: controller),
+          ),
+        );
+      },
+      child: Container(
+        width: double.infinity,
+        padding: const EdgeInsets.all(20),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(28),
+          color: Theme.of(context).colorScheme.surfaceVariant.withOpacity(.5),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(texts.translate('sleep_sanctuary'),
+                style: Theme.of(context).textTheme.titleLarge),
+            const SizedBox(height: 8),
+            Text(texts.translate('sleep_preview')),
+            const SizedBox(height: 12),
+            TweenAnimationBuilder<double>(
+              key: ValueKey(progress),
+              tween: Tween(begin: 0, end: progress),
+              duration: const Duration(milliseconds: 400),
+              builder: (context, value, _) {
+                return LinearProgressIndicator(value: value);
+              },
+            ),
+            const SizedBox(height: 8),
+            Text('${(progress * 100).round()}%'),
+          ],
+        ),
+      ),
     );
   }
 }

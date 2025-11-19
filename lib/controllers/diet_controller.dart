@@ -212,6 +212,135 @@ class DietController extends ChangeNotifier {
       trend: .05,
     ),
   ];
+  final List<EnergyPattern> _energyPatterns = [
+    EnergyPattern(
+      id: 'pulse_focus',
+      titleEn: 'Pulse focus',
+      titleAr: 'نبض التركيز',
+      descriptionEn: 'Four-count box breathing with gentle holds.',
+      descriptionAr: 'تنفس صندوقي لأربع عدات مع ثبات هادئ.',
+      length: const Duration(minutes: 4),
+      intensity: .6,
+    ),
+    EnergyPattern(
+      id: 'wave_stride',
+      titleEn: 'Wave stride',
+      titleAr: 'موجة الخطى',
+      descriptionEn: 'Alternate nostril breathing plus shoulder rolls.',
+      descriptionAr: 'تنفس تناوبي مع تدوير للكتفين.',
+      length: const Duration(minutes: 6),
+      intensity: .7,
+    ),
+    EnergyPattern(
+      id: 'neon_flow',
+      titleEn: 'Neon flow',
+      titleAr: 'تدفق نيون',
+      descriptionEn: '1-4-2 breath ladder synced with arm sweeps.',
+      descriptionAr: 'سلم تنفس 1-4-2 متزامن مع حركة الذراع.',
+      length: const Duration(minutes: 5),
+      intensity: .8,
+    ),
+  ];
+  final List<double> _energySparkline = [.32, .48, .58, .62, .66, .72, .68];
+  double _energyCharge = .64;
+  final List<SleepCue> _sleepCues = [
+    SleepCue(
+      id: 'dim',
+      titleEn: 'Dim the room',
+      titleAr: 'تعتيم الغرفة',
+      detailEn: 'Switch to amber lights and silence notifications.',
+      detailAr: 'أضئ أنواراً دافئة وأغلق الإشعارات.',
+      emoji: '🕯️',
+      duration: const Duration(minutes: 3),
+    ),
+    SleepCue(
+      id: 'stretch',
+      titleEn: 'Neck stretch',
+      titleAr: 'تمدد الرقبة',
+      detailEn: 'Slow neck rolls, inhale up and exhale down.',
+      detailAr: 'حركات دائرية بطيئة للرقبة مع تنفس عميق.',
+      emoji: '🌀',
+      duration: const Duration(minutes: 4),
+    ),
+    SleepCue(
+      id: 'journal',
+      titleEn: 'Mini journal',
+      titleAr: 'مذكرات قصيرة',
+      detailEn: 'Write one gratitude line, park tomorrow’s tasks.',
+      detailAr: 'اكتب سطر امتنان وصف مهام الغد.',
+      emoji: '📓',
+      duration: const Duration(minutes: 5),
+    ),
+    SleepCue(
+      id: 'breath',
+      titleEn: 'Cooling breath',
+      titleAr: 'تنفس مبرد',
+      detailEn: 'Sip air through teeth, exhale warm calm.',
+      detailAr: 'اسحب الهواء عبر الأسنان وأخرج دفئاً هادئاً.',
+      emoji: '🌙',
+      duration: const Duration(minutes: 2),
+    ),
+  ];
+  double _windDownProgress = .58;
+  final List<MomentumMoment> _moments = [
+    MomentumMoment(
+      id: 'morning_glow',
+      titleEn: 'Morning glow logged',
+      titleAr: 'إشراقة الصباح مسجلة',
+      detailEn: 'Added citrus shake and stretched wrists.',
+      detailAr: 'أضفت عصير الحمضيات ومددت المعصمين.',
+      timestamp: DateTime.now().subtract(const Duration(hours: 5)),
+      energy: .74,
+    ),
+    MomentumMoment(
+      id: 'hydration_wave',
+      titleEn: 'Hydration wave held',
+      titleAr: 'موجة الترطيب ثابتة',
+      detailEn: 'Finished 400 ml before noon meeting.',
+      detailAr: 'أنهيت 400 مل قبل اجتماع الظهر.',
+      timestamp: DateTime.now().subtract(const Duration(hours: 26)),
+      energy: .66,
+    ),
+    MomentumMoment(
+      id: 'night_walk',
+      titleEn: 'Night walk synced',
+      titleAr: 'مشى ليلي متناغم',
+      detailEn: 'Logged 900 steps while calling a friend.',
+      detailAr: 'سجلت 900 خطوة أثناء الاتصال بصديق.',
+      timestamp: DateTime.now().subtract(const Duration(days: 2)),
+      energy: .61,
+    ),
+  ];
+  final List<MomentumMoment> _momentSeeds = [
+    MomentumMoment(
+      id: 'seed_focus',
+      titleEn: 'Focus snack crafted',
+      titleAr: 'وجبة تركيز مصنوعة',
+      detailEn: 'Matcha, chia, and neon notes prepped for tomorrow.',
+      detailAr: 'ماتشا وشيا ولمسات نيون جاهزة للغد.',
+      timestamp: DateTime.now(),
+      energy: .7,
+    ),
+    MomentumMoment(
+      id: 'seed_breath',
+      titleEn: 'Breath ladder completed',
+      titleAr: 'سلم التنفس مكتمل',
+      detailEn: 'Held 5 rounds of 4-4 breathing before lunch.',
+      detailAr: 'أتممت 5 جولات من تنفس 4-4 قبل الغداء.',
+      timestamp: DateTime.now(),
+      energy: .73,
+    ),
+    MomentumMoment(
+      id: 'seed_colors',
+      titleEn: 'Color plate remixed',
+      titleAr: 'طبق الألوان متجدد',
+      detailEn: 'Added purple cabbage to evening bowl.',
+      detailAr: 'أضفت الكرنب البنفسجي لطبق المساء.',
+      timestamp: DateTime.now(),
+      energy: .69,
+    ),
+  ];
+  final Random _random = Random();
   final List<RecoverySession> _recoverySessions = [
     RecoverySession(
       id: 'lunar_rest',
@@ -353,6 +482,12 @@ class DietController extends ChangeNotifier {
   List<WellnessHabit> get habits => List.unmodifiable(_habits);
   List<GroceryItem> get groceryItems => List.unmodifiable(_groceries);
   List<InsightCard> get insightCards => List.unmodifiable(_insights);
+  List<EnergyPattern> get energyPatterns => List.unmodifiable(_energyPatterns);
+  List<double> get energySparkline => List.unmodifiable(_energySparkline);
+  double get energyCharge => _energyCharge;
+  List<SleepCue> get sleepCues => List.unmodifiable(_sleepCues);
+  double get windDownProgress => _windDownProgress;
+  List<MomentumMoment> get momentumMoments => List.unmodifiable(_moments);
   List<RecoverySession> get recoverySessions =>
       List.unmodifiable(_recoverySessions);
   List<RitualBlueprint> get ritualBlueprints => List.unmodifiable(_rituals);
@@ -441,6 +576,95 @@ class DietController extends ChangeNotifier {
   void clearComparison() {
     _comparisonIds.clear();
     notifyListeners();
+  }
+
+  void boostEnergy(double delta) {
+    _energyCharge = (_energyCharge + delta).clamp(0.0, 1.0);
+    _pulseSparkline();
+    notifyListeners();
+  }
+
+  void toggleEnergyPattern(String id) {
+    for (final pattern in _energyPatterns) {
+      if (pattern.id == id) {
+        pattern.active = !pattern.active;
+        pattern.intensity =
+            (pattern.intensity + (_random.nextDouble() * .2 - .1)).clamp(.3, 1);
+      } else {
+        pattern.active = false;
+      }
+    }
+    notifyListeners();
+  }
+
+  void shuffleEnergyPatterns() {
+    _energyPatterns.shuffle();
+    notifyListeners();
+  }
+
+  void toggleSleepCue(String id) {
+    final cue = _sleepCues.firstWhere((element) => element.id == id);
+    cue.completed = !cue.completed;
+    final completed = _sleepCues.where((c) => c.completed).length;
+    _windDownProgress = (completed / _sleepCues.length).clamp(0, 1);
+    notifyListeners();
+  }
+
+  void updateWindDownProgress(double value) {
+    _windDownProgress = value.clamp(0, 1);
+    notifyListeners();
+  }
+
+  void addRandomMomentum() {
+    final template = _momentSeeds[_random.nextInt(_momentSeeds.length)];
+    _moments.insert(
+      0,
+      MomentumMoment(
+        id: 'moment_${DateTime.now().millisecondsSinceEpoch}',
+        titleEn: template.titleEn,
+        titleAr: template.titleAr,
+        detailEn: template.detailEn,
+        detailAr: template.detailAr,
+        timestamp: DateTime.now(),
+        energy: (template.energy + (_random.nextDouble() * .12 - .06))
+            .clamp(.4, .95),
+      ),
+    );
+    notifyListeners();
+  }
+
+  void addManualMomentum(String detail) {
+    if (detail.trim().isEmpty) return;
+    _moments.insert(
+      0,
+      MomentumMoment(
+        id: 'note_${DateTime.now().millisecondsSinceEpoch}',
+        titleEn: 'Manual reflection',
+        titleAr: 'ملاحظة ذاتية',
+        detailEn: detail,
+        detailAr: detail,
+        timestamp: DateTime.now(),
+        energy: (.55 + _random.nextDouble() * .25).clamp(.4, .95),
+      ),
+    );
+    if (_reflections.length > 8) {
+      _reflections.removeLast();
+    }
+    _reflections.insert(0, detail);
+    notifyListeners();
+  }
+
+  void shuffleMoments() {
+    _moments.shuffle();
+    notifyListeners();
+  }
+
+  void _pulseSparkline() {
+    final next = (_energySparkline.last + (_random.nextDouble() * .14 - .07))
+        .clamp(.2, .95);
+    _energySparkline
+      ..removeAt(0)
+      ..add(next);
   }
 
   void logHydration(double ml) {

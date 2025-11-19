@@ -12,6 +12,9 @@ import '../habits/habit_studio_screen.dart';
 import '../insights/insights_screen.dart';
 import '../recipes/recipe_lab_screen.dart';
 import '../recovery/recovery_suite_screen.dart';
+import '../recharge/energy_studio_screen.dart';
+import '../recharge/momentum_journal_screen.dart';
+import '../recharge/sleep_sanctuary_screen.dart';
 import '../rewards/rewards_vault_screen.dart';
 import '../rituals/ritual_builder_screen.dart';
 import '../wellness/wellness_hub_screen.dart';
@@ -130,6 +133,32 @@ class ProfileScreen extends StatelessWidget {
               },
             ),
             ListTile(
+              title: Text(texts.translate('energy_studio')),
+              subtitle: Text(texts.translate('energy_wave_hint')),
+              leading: const Icon(Icons.bolt),
+              trailing: const Icon(Icons.chevron_right),
+              onTap: () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (_) => EnergyStudioScreen(controller: dietController),
+                  ),
+                );
+              },
+            ),
+            ListTile(
+              title: Text(texts.translate('sleep_sanctuary')),
+              subtitle: Text(texts.translate('sleep_preview')),
+              leading: const Icon(Icons.nights_stay),
+              trailing: const Icon(Icons.chevron_right),
+              onTap: () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (_) => SleepSanctuaryScreen(controller: dietController),
+                  ),
+                );
+              },
+            ),
+            ListTile(
               title: Text(texts.translate('habit_studio')),
               subtitle: Text(texts.translate('habit_settings_hint')),
               leading: const Icon(Icons.refresh_rounded),
@@ -233,6 +262,21 @@ class ProfileScreen extends StatelessWidget {
                 Navigator.of(context).push(
                   MaterialPageRoute(
                     builder: (_) => RewardsVaultScreen(
+                      controller: dietController,
+                    ),
+                  ),
+                );
+              },
+            ),
+            ListTile(
+              title: Text(texts.translate('momentum_journal')),
+              subtitle: Text(texts.translate('momentum_intro')),
+              leading: const Icon(Icons.timeline),
+              trailing: const Icon(Icons.chevron_right),
+              onTap: () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (_) => MomentumJournalScreen(
                       controller: dietController,
                     ),
                   ),

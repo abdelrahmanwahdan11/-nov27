@@ -180,3 +180,85 @@ class RewardBadge {
   String localizedDescription(Locale locale) =>
       locale.languageCode == 'ar' ? descriptionAr : descriptionEn;
 }
+
+class EnergyPattern {
+  EnergyPattern({
+    required this.id,
+    required this.titleEn,
+    required this.titleAr,
+    required this.descriptionEn,
+    required this.descriptionAr,
+    required this.length,
+    this.intensity = .5,
+    this.active = false,
+  });
+
+  final String id;
+  final String titleEn;
+  final String titleAr;
+  final String descriptionEn;
+  final String descriptionAr;
+  final Duration length;
+  double intensity;
+  bool active;
+
+  String localizedTitle(Locale locale) =>
+      locale.languageCode == 'ar' ? titleAr : titleEn;
+
+  String localizedDescription(Locale locale) =>
+      locale.languageCode == 'ar' ? descriptionAr : descriptionEn;
+}
+
+class SleepCue {
+  SleepCue({
+    required this.id,
+    required this.titleEn,
+    required this.titleAr,
+    required this.detailEn,
+    required this.detailAr,
+    required this.emoji,
+    this.duration = const Duration(minutes: 5),
+    this.completed = false,
+  });
+
+  final String id;
+  final String titleEn;
+  final String titleAr;
+  final String detailEn;
+  final String detailAr;
+  final String emoji;
+  final Duration duration;
+  bool completed;
+
+  String localizedTitle(Locale locale) =>
+      locale.languageCode == 'ar' ? titleAr : titleEn;
+
+  String localizedDetail(Locale locale) =>
+      locale.languageCode == 'ar' ? detailAr : detailEn;
+}
+
+class MomentumMoment {
+  MomentumMoment({
+    required this.id,
+    required this.titleEn,
+    required this.titleAr,
+    required this.detailEn,
+    required this.detailAr,
+    required this.timestamp,
+    this.energy = .6,
+  });
+
+  final String id;
+  final String titleEn;
+  final String titleAr;
+  final String detailEn;
+  final String detailAr;
+  final DateTime timestamp;
+  double energy;
+
+  String localizedTitle(Locale locale) =>
+      locale.languageCode == 'ar' ? titleAr : titleEn;
+
+  String localizedDetail(Locale locale) =>
+      locale.languageCode == 'ar' ? detailAr : detailEn;
+}
